@@ -1,4 +1,5 @@
 import express, { type NextFunction, Request, Response } from "express";
+import { errorController } from "./Controllers/error-controller";
 import lead_router from "./routes/leads-routes";
 
 const app = express();
@@ -14,5 +15,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     message: `Can't find ${req.originalUrl}`,
   });
 });
+
+app.use(errorController);
 
 export default app;
