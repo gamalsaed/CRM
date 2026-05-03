@@ -4,21 +4,33 @@ import asyncCatch from "../utils/catch-async";
 import Lead from "../Models/lead-modal";
 import { LeadSchema } from "../utils/types/lead-types";
 import { LEAD_FIELDS } from "../utils/constance";
-import LeadAPIFeature from "../utils/features/APILeadsFeatures";
+import APIFeatures from "../utils/features/APIFeatures";
+import { safeBodyFields } from "../utils/safe-body";
+import User from "../Models/user-modal";
+import Project from "../Models/project-modal";
 
 export const getAllLeads = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.query);
-    const LeadFeature = new LeadAPIFeature(req.query, Lead)
+    const LeadFeature = new APIFeatures<LeadSchema>(req.query, Lead, [
+      ...LEAD_FIELDS,
+      "createdAt",
+    ])
       .filter()
       .fields()
       .pagination();
 
-    const leads = await LeadFeature.query;
+    let query = LeadFeature.query;
 
+    if (req.user.role === "user") {
+      query = LeadFeature.query
+        .find({ assignedTo: req.user.id })
+        .select("-assignedTo");
+    }
+    query = LeadFeature.query.find().populate("project", "name");
+    const leads = await query;
     res.status(200).json({
       status: "success",
-      result: leads.length,
+      result: leads.length!,
       data: {
         leads,
       },
@@ -45,7 +57,10 @@ export const getLead = asyncCatch(
 
 export const createLead = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const new_lead = await Lead.create(req.body);
+    const fields = safeBodyFields<Partial<LeadSchema>>(req.body, LEAD_FIELDS);
+
+    const new_lead = await Lead.create(fields);
+
     res.status(200).json({
       status: "success",
       data: {
@@ -57,18 +72,12 @@ export const createLead = asyncCatch(
 
 export const updateLead = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const filteredBody: Partial<LeadSchema> = {};
-
-    Object.keys(req.body).forEach((key) => {
-      if (LEAD_FIELDS.includes(key)) {
-        filteredBody[key as keyof LeadSchema] = req.body[key];
-      }
-    });
+    const fields = safeBodyFields<Partial<LeadSchema>>(req.body, LEAD_FIELDS);
 
     const updatedLead = await Lead.findByIdAndUpdate(
       req.params.leadId,
       {
-        ...filteredBody,
+        ...fields,
       },
       {
         new: true,
@@ -89,10 +98,28 @@ export const updateLead = asyncCatch(
   },
 );
 
+export const assignLeadToUser = asyncCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const person = await User.findById(req.params.userId);
+    if (!person)
+      return next(
+        new AppError(
+          "User you are trying to assign the lead to is not found!",
+          404,
+        ),
+      );
+
+    await Lead.updateMany(
+      { _id: { $in: req.body.leads } },
+      { assignedTo: req.params.userId },
+    );
+    res.status(203).json({ status: "success" });
+  },
+);
+
 export const addNote = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { note, createdBy } = req.body;
-
     const updatedLead = await Lead.findByIdAndUpdate(
       req.params.leadId,
       {
@@ -141,5 +168,36 @@ export const deleteLead = asyncCatch(
     res.status(204).json({
       status: "success",
     });
+  },
+);
+
+export const assignLeadToProject = asyncCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const project = await Project.findById(req.params.projectId);
+
+    if (!Array.isArray(req.body.leads)) {
+      return next(new AppError("Leads must be an array", 400));
+    }
+
+    const leads = await Lead.find({ _id: { $in: req.body.leads } });
+
+    if (leads.length !== req.body.leads.length) {
+      return next(new AppError("Some leads not found", 404));
+    }
+
+    if (!project)
+      return next(
+        new AppError(
+          "Project you are trying to assign the lead to is not found!",
+          404,
+        ),
+      );
+
+    await Lead.updateMany(
+      { _id: { $in: req.body.leads } },
+      { project: req.params.projectId },
+    );
+
+    res.status(200).json({ status: "success" });
   },
 );

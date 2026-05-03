@@ -7,7 +7,16 @@ export interface LeadSchema {
   email: string;
   address: string;
   createdAt: Date;
+  project: ObjectId;
+  source:
+    | "tik tok"
+    | "snapchat"
+    | "facebook"
+    | "instagram"
+    | "recommended"
+    | "other";
   status: "new" | "contacted" | "qualified" | "closed";
+  assignedTo: ObjectId;
   notes: {
     note: string;
     createdAt: Date;
