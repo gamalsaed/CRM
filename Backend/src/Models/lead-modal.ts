@@ -1,4 +1,4 @@
-import mongoose, { type ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import validator from "validator";
 import { LeadSchema } from "../utils/types/lead-types";
 
@@ -23,14 +23,43 @@ const leadSchema = new mongoose.Schema<LeadSchema>({
   address: {
     type: String,
   },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Project",
+  },
   status: {
     type: String,
-    enum: ["new", "contacted", "qualified", "closed", "lost"],
+    enum: [
+      "new",
+      "contacted",
+      "qualified",
+      "closed",
+      "lost",
+      "problem",
+      "solved",
+    ],
     default: "new",
   },
+
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  source: {
+    type: String,
+    enum: [
+      "tik tok",
+      "snapchat",
+      "facebook",
+      "instagram",
+      "recommended",
+      "other",
+    ],
+    default: "other",
+  },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   notes: [
     {
