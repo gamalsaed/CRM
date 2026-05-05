@@ -117,12 +117,6 @@ NEXTAUTH_URL=
 
 ---
 
-## 📬 Contact
-
-- LinkedIn / GitHub
-
----
-
 ## ⭐ Notes
 
 This project is built for:
@@ -130,3 +124,10 @@ This project is built for:
 - Learning & practice
 - Strengthening portfolio
 - Real-world business use cases
+
+## 👨‍💻 Author
+
+**Gamal Saed** — Frontend Developer (React.js & Next.js)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gamal-saed-846506223/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/gamalsaed)
