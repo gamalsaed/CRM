@@ -1,5 +1,8 @@
 {
   "HomePage": {
     "title": "مرحبا"
+  },
+  "LoginPage": {
+    "title": "تسجيل الدخول"
   }
 }

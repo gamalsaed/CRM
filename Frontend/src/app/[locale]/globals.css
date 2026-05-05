@@ -5,6 +5,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-primary-50: rgb(238, 243, 253);
+  --color-primary-100: rgb(216, 227, 251);
+  --color-primary-200: rgb(185, 205, 249);
+  --color-primary-300: rgb(146, 177, 245);
+  --color-primary-400: rgb(92, 138, 240);
+  --color-primary-500: rgb(37, 99, 235);
+  --color-primary-600: rgb(33, 87, 207);
+  --color-primary-700: rgb(28, 75, 179);
+  --color-primary-800: rgb(23, 61, 146);
+  --color-primary-900: rgb(18, 48, 113);
+  --color-primary-950: rgb(10, 28, 66);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -126,5 +137,20 @@
   }
   html {
     @apply font-mono;
+  }
+}
+
+@keyframes fade-in-out {
+  from {
+    background-color: rgb(37, 99, 235);
+  }
+  to {
+    transform: rgb(216, 227, 251);
+  }
+  from {
+    background-color: rgb(37, 99, 235);
+  }
+  to {
+    transform: rgb(216, 227, 251);
   }
 }
