@@ -1,8 +1,11 @@
 import { signIn } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
-import type { LoginCredintials } from "@/lib/types/auth";
+import type { LoginCredintials } from "@/shared/lib/types/auth";
+import { useRouter } from "@/i18n/navigation";
 
 export function useLogin() {
+  const router = useRouter();
+
   // Mutation
   const {
     mutate: login,
@@ -21,6 +24,10 @@ export function useLogin() {
       if (response && !response.ok) {
         throw new Error(response?.error ?? "Login failed");
       }
+    },
+    onSuccess: () => {
+      router.push("/dashboard");
+      location.reload();
     },
   });
 

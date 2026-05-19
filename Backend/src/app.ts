@@ -4,10 +4,17 @@ import lead_router from "./routes/leads-routes";
 import auth_router from "./routes/auth-routes";
 import user_router from "./routes/user-routes";
 import project_router from "./routes/project-routes";
+import cors from "cors";
 
 import { protect } from "./middlewares/authMiddleware";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Next.js
+  }),
+);
 
 app.use(express.json());
 

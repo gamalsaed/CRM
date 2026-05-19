@@ -26,7 +26,10 @@ export const getAllLeads = asyncCatch(
         .find({ assignedTo: req.user.id })
         .select("-assignedTo");
     }
-    query = LeadFeature.query.find().populate("project", "name");
+    query = LeadFeature.query
+      .find()
+      .populate("project", "name")
+      .populate("assignedTo");
     const leads = await query;
     res.status(200).json({
       status: "success",
@@ -201,3 +204,57 @@ export const assignLeadToProject = asyncCatch(
     res.status(200).json({ status: "success" });
   },
 );
+
+export const getLeadsStatusStats = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const matchStage: any = {};
+
+    if (req.user.role === "user") {
+      matchStage.assignedTo = req.user.id;
+    }
+
+    const stats = await Lead.aggregate([
+      {
+        $match: matchStage,
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    console.log(stats);
+    const defaultStatuses = [
+      "new",
+      "contacted",
+      "qualified",
+      "closed",
+      "lost",
+      "problem",
+      "solved",
+    ];
+
+    const formattedStats = defaultStatuses.map((status) => {
+      const foundStatus = stats.find((item) => item._id === status);
+
+      return {
+        status,
+        count: foundStatus ? foundStatus.count : 0,
+      };
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        stats: formattedStats,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

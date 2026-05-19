@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import { Providers } from "@/shared/providers/index.p";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Hanken_Grotesk } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,7 @@ export default async function RootLayout({
     >
       <body>
         <Providers locale={locale}>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

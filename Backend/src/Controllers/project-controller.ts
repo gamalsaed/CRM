@@ -8,7 +8,10 @@ import User from "../Models/user-modal";
 
 export const getAllProjects = asyncCatch(
   async (_: Request, res: Response, next: NextFunction) => {
-    const projects = await Project.find().populate("leads");
+    const projects = await Project.find()
+      .populate("leads")
+      .populate("leader", "name email phone")
+      .populate("team", "name email phone");
 
     res.status(200).json({
       status: "success",
@@ -38,8 +41,8 @@ export const getProject = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const project = await Project.findById(req.params.projectId)
       .populate("leads")
-      .populate("team", "name email")
-      .populate("leader", "name email");
+      .populate("team", "name email phone")
+      .populate("leader", "name email phone");
 
     if (!project) return next(new AppError("This project dosen't exist", 404));
 

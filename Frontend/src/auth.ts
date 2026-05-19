@@ -1,6 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { ApiResponse, LoginResponse } from "./lib/types/api-types";
+import { ApiResponse, LoginResponse } from "./shared/lib/types/api-types";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,

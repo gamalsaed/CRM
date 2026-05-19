@@ -35,6 +35,7 @@ export const login = asyncCatch(
       return next(new AppError("Email and Password are required", 400));
     }
     const user = await User.findOne({ email: req.body.email });
+
     const passwordIsCorrect = await bcrypt.compare(
       req.body.password,
       user?.password!,
@@ -45,7 +46,6 @@ export const login = asyncCatch(
     }
 
     const token = generateToken(user._id);
-
     res.status(201).json({
       status: "success",
       data: {

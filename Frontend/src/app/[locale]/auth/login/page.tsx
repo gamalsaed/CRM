@@ -1,11 +1,8 @@
 import LoginForm from "./_components/login-form";
 import { Lock } from "lucide-react";
-import getMyToken from "@/lib/utils/getToken";
 import Image from "next/image";
 
 export default async function page() {
-  const token = await getMyToken();
-  console.log("Token: ", token);
   return (
     <div className="flex justify-center h-full items-center">
       <div>

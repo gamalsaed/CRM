@@ -3,8 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useLogin } from "@/shared/hooks/use-login";
 import * as z from "zod";
+import { ErrorBox } from "@/shared/components/error_box";
+// Shadcn
 import { Button } from "@/components/ui/button";
-import { loginSchema } from "@/lib/schemas/auth.s";
+import { loginSchema } from "@/shared/lib/schemas/auth.s";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
@@ -16,8 +18,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
+  // Custom Hook
   const { login, error, isPending } = useLogin();
-
+  console.log("Error: ", error);
+  // React Hook Form
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,9 +31,12 @@ export default function LoginForm() {
     },
   });
 
+  // Functions
   function onSubmit(data: z.infer<typeof loginSchema>) {
+    console.log(data);
     login(data);
   }
+
   return (
     <form
       id="form-rhf-demo"
@@ -48,7 +55,6 @@ export default function LoginForm() {
                 id="form-email"
                 aria-invalid={fieldState.invalid}
                 placeholder="Enter your email"
-                autoComplete="off"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -94,29 +100,10 @@ export default function LoginForm() {
           )}
         />
       </FieldGroup>
-      <Button
-        type="submit"
-        form="form-rhf-demo"
-        className="w-full cursor-pointer  duration-75 transition-colors py-5 rounded-xl bg-linear-to-r from-primary-500 to-primary-600 hover:bg-linear-to-r hover:from-primary-600 hover:to-primary-700"
-        disabled={isPending}
-      >
+      {error && <ErrorBox error={`${error}`} />}
+      <Button type="submit" form="form-rhf-demo" disabled={isPending}>
         {isPending ? "Signing in..." : "Sign in to G-CRM"}
       </Button>
     </form>
   );
 }
-// <Card className="w-full sm:max-w-md flex ">
-{
-  /* <CardContent> */
-}
-{
-  /* </CardContent> */
-}
-{
-  /* <CardFooter>
-        <Field orientation="horizontal">
-
-        </Field>
-      </CardFooter> */
-}
-// </Card>

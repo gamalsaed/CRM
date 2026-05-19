@@ -13,6 +13,10 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
+  if (token && request.url.includes("auth")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
   return handleI18nRouting(request);
 }
 
