@@ -1,17 +1,3 @@
-export type ProjectType = {
-  _id: string;
-  name: string;
-  createdAt: Date;
-  leads: string[];
-  team: string[];
-  leader: {
-    name: string;
-    email: string;
-    phone: string;
-    _id: string;
-  };
-};
-
 export type LeadType = {
   name: string;
   _id: string;
@@ -52,8 +38,19 @@ export type User = {
   _id: string;
   name: string;
   email: string;
-  role: string;
+  role: "user" | "team leader" | "admin" | "data entry";
   phone: string;
   passwordChangedAt: string;
   createdAt: string;
 };
+
+export type ProjectType = {
+  _id: string;
+  name: string;
+  createdAt: Date;
+  leads: LeadType[];
+  team: User[];
+  leader: User;
+  createdBy: User;
+};
+export type Role = "admin" | "team leader" | "data entry" | "user";

@@ -1,14 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { LeadType } from "../../lib/types/app-data.t";
+import { LeadType } from "../../../../shared/lib/types/app-data.t";
 import { useSession } from "next-auth/react";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { restrictTo } from "@/shared/lib/utils/restrictTo";
-import DropDownActions from "./drop-down-action";
+import DropDownActions from "@/shared/components/lead-drop-down-action";
 
 type LeadRowType = Pick<
   LeadType,
@@ -57,7 +57,7 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
       header: ({ column }) => {
         return (
           <Button
-            className="text-lg"
+            className="text-base text-gray-500"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -72,7 +72,7 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
       header: ({ column }) => {
         return (
           <Button
-            className="text-lg"
+            className="text-base text-gray-500"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -128,7 +128,7 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
       header: ({ column }) => {
         return (
           <Button
-            className="text-lg"
+            className="text-base text-gray-500"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -140,10 +140,11 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
     },
     {
       accessorKey: "project",
+      accessorFn: (row) => row.project?.name ?? "No Project",
       header: ({ column }) => {
         return (
           <Button
-            className="text-lg"
+            className="text-base text-gray-500"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -158,14 +159,15 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
     },
     {
       accessorKey: "user",
+      accessorFn: (row) => row.assignedTo?.name ?? "Not assigned yet",
       header: ({ column }) => {
         return (
           <Button
-            className="text-lg"
+            className="text-base text-gray-500 "
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            User
+            Assigned To
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -176,21 +178,19 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
         );
       },
     },
-    {
-      id: "actions",
-      header: ({ column }) => "Actions",
-      cell: ({ row }) => {
-        return <DropDownActions ids={[row.original._id]} />;
-      },
-    },
   ];
 
-  if (role === "admin" || role === "team leader") {
+  if (
+    session.data &&
+    ["admin", "team leader"].includes(session.data?.user.role!)
+  ) {
     columns.push({
-      accessorKey: "assignedTo",
-      header: "Assigned To",
+      id: "actions",
+      header: ({ column }) => (
+        <span className="text-base text-gray-500">Actions</span>
+      ),
       cell: ({ row }) => {
-        return <span>{row.original.assignedTo?.name || "Not Assigned"}</span>;
+        return <DropDownActions ids={[row.original._id]} />;
       },
     });
   }

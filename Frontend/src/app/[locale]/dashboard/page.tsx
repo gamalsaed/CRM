@@ -6,6 +6,7 @@ import { getLeadsStatus, getLeads } from "@/shared/lib/services/leads.s";
 import { getProjects } from "@/shared/lib/services/projects.s";
 import LeadsTable from "./_components/leads-table";
 import Projects from "@/shared/layouts/projects";
+import { LeadsChartBar } from "./_components/bar-chart";
 
 export default async function page() {
   // Token
@@ -14,6 +15,7 @@ export default async function page() {
   // Fetching Data
   const { error: leadsStatusError, data: leadsStatusData } =
     await getLeadsStatus(`${token}`);
+
   const { error: projectsError, data: projectsData } = await getProjects(
     `${token}`,
   );
@@ -48,24 +50,29 @@ export default async function page() {
             },
           )}
       </div>
-      <div className="flex items-center justify-between mb-4 mt-8">
-        <h1 className="text-3xl font-bold text-primary-500 ">Projects</h1>
-        <Link
-          href="/dashboard/projects"
-          className="text-sm text-gray-400 cursor-pointer"
-        >
-          View All Projects
-        </Link>
-      </div>
+
+      {leadsStatusData && <LeadsChartBar data={leadsStatusData.stats} />}
+      {projectsData?.data?.projects.length > 0 && (
+        <div className="flex items-center justify-between mb-4 mt-8">
+          <h1 className="text-3xl font-bold text-primary-500 ">Projects</h1>
+          <Link
+            href="/dashboard/projects"
+            className="text-sm text-gray-400 cursor-pointer"
+          >
+            View All Projects
+          </Link>
+        </div>
+      )}
       {/* PROJECTS */}
       <Projects
         data={projectsData?.data.projects.slice(0, 2) ?? []}
         error={projectsError}
+        env="home"
       />
       {/* LEADS TABLE */}
       {leadsError && <ErrorBox error={`${leadsError}`} />}
       {leadsData && leadsData.status === "success" && (
-        <LeadsTable leads={leadsData.data.leads} />
+        <LeadsTable env="home" leads={leadsData.data.leads} />
       )}
     </div>
   );

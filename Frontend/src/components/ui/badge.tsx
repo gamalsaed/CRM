@@ -5,7 +5,7 @@ import { Slot } from "radix-ui";
 import { cn } from "@/shared/lib/utils/utils";
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-none border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
+  "group/badge inline-flex  h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
   {
     variants: {
       variant: {
@@ -19,13 +19,13 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
-        new: "border-blue-300 bg-blue-100 text-blue-700",
-        contacted: "border-yellow-300 bg-yellow-100 text-yellow-700",
-        qualified: "border-green-300 bg-green-100 text-green-700",
-        closed: "border-emerald-300 bg-emerald-100 text-emerald-700",
-        lost: "border-red-300 bg-red-100 text-red-700",
-        problem: "border-orange-300 bg-orange-100 text-orange-700",
-        solved: "border-purple-300 bg-purple-100 text-purple-700",
+        new: " bg-blue-100 text-blue-700",
+        contacted: " bg-yellow-100 text-yellow-700",
+        qualified: " bg-green-100 text-green-700",
+        closed: " bg-emerald-100 text-emerald-700",
+        lost: " bg-red-100 text-red-700",
+        problem: "bg-orange-100 text-orange-700",
+        solved: " bg-purple-100 text-purple-700",
       },
     },
     defaultVariants: {

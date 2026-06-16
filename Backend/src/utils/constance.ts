@@ -11,6 +11,7 @@ export const USER_FIELDS = [
   "name",
   "email",
   "phone",
+  "role",
   "password",
   "confirmPassword",
 ];

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
 import Image from "next/image";
-import { ROLES } from "@/shared/lib/constanct";
+import { ROLES } from "@/shared/lib/constant";
 const data = [
   {
     title: "Dashboard",

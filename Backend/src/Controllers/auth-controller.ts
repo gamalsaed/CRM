@@ -12,7 +12,6 @@ export const signup = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const user_fields = safeBodyFields<UserSchema>(req.body, USER_FIELDS);
     const user: Partial<UserSchema> = await User.create(user_fields);
-    const token = generateToken(user._id?.toString()!);
 
     res.status(201).json({
       status: "success",
@@ -22,8 +21,8 @@ export const signup = asyncCatch(
           name: user.name,
           email: user.email,
           role: user.role,
+          phone: user.phone,
         },
-        token,
       },
     });
   },

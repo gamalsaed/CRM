@@ -28,9 +28,32 @@ export const getAllLeads = asyncCatch(
     }
     query = LeadFeature.query
       .find()
-      .populate("project", "name")
-      .populate("assignedTo");
-    const leads = await query;
+      .populate({
+        path: "project",
+      })
+      .populate("assignedTo", "name email phone role createdAt");
+
+    let leads = await query;
+
+    if (req.user.role === "team leader") {
+      const projects = await Project.find({
+        $or: [{ leader: req.user._id }, { team: req.user._id }],
+      }).populate({
+        path: "leads",
+        populate: [
+          {
+            path: "assignedTo",
+            select: "name email phone role",
+          },
+          {
+            path: "project",
+            select: "name description",
+          },
+        ],
+      });
+      leads = projects.flatMap((project) => (project as any).leads || []);
+    }
+
     res.status(200).json({
       status: "success",
       result: leads.length!,
@@ -228,7 +251,6 @@ export const getLeadsStatusStats = async (
         },
       },
     ]);
-    console.log(stats);
     const defaultStatuses = [
       "new",
       "contacted",

@@ -15,9 +15,11 @@ import {
 import { ChevronDown, LogOut, UserRoundCog } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { cn } from "@/shared/lib/utils/utils";
+import { useSession } from "next-auth/react";
 
 export default function ProfileDropDown() {
   const [isOpen, onOpen] = useState(false);
+  const { data } = useSession();
   return (
     <DropdownMenu onOpenChange={onOpen} open={isOpen}>
       <DropdownMenuTrigger asChild>
@@ -40,7 +42,7 @@ export default function ProfileDropDown() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link
-            href="#"
+            href={`/dashboard/edit-profile`}
             className="px-4 py-2.5 my-1 flex gap-2 cursor-pointer text-sm text-gray-700 hover:bg-primary-50! hover:text-primary-800!"
           >
             <UserRoundCog width={16} height={16} />

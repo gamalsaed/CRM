@@ -38,7 +38,7 @@ class APIFeatures<T> {
       let selectedFields = this.queryObject["fields"].split(",").join(" ");
       this.query = this.query.select(selectedFields);
     } else {
-      this.query = this.query.select("-__v");
+      this.query = this.query.select("-__v -password");
     }
     return this;
   }

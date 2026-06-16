@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-
+import { useRouter } from "@/i18n/navigation";
 // Tanstack Table
 import {
   ColumnDef,
@@ -14,6 +14,7 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
   VisibilityState,
+  getFacetedUniqueValues,
 } from "@tanstack/react-table";
 
 // Shadcn Components
@@ -33,16 +34,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import DropDownActions from "./drop-down-action";
+import { cn } from "../lib/utils/utils";
+import DropDownActions from "./lead-drop-down-action";
 
 interface DataTableProps<TData extends { _id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  clickable?: boolean;
+  tableHead?: React.ReactNode;
 }
 
 export function DataTable<TData extends { _id: string }, TValue>({
   columns,
   data,
+  clickable = false,
+  tableHead,
 }: DataTableProps<TData, TValue>) {
   // Table States
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -52,6 +58,10 @@ export function DataTable<TData extends { _id: string }, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState("");
+
+  // Router
+  const router = useRouter();
 
   // Table Hook
   const table = useReactTable({
@@ -63,65 +73,73 @@ export function DataTable<TData extends { _id: string }, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
   });
+
   const users_ids = table
     .getSelectedRowModel()
     .rows.map((row) => row.original._id);
 
+  function rowClickAction(id: string) {
+    if (clickable) {
+      router.push(`/dashboard/employees/${id}`);
+    }
+  }
+
   return (
     <div className="overflow-hidden rounded-md border">
       {/* Table Header */}
-      {table.getFilteredSelectedRowModel().rows.length === 0 && (
-        <div className="flex items-center justify-between px-4 py-4">
-          <h1 className="text-3xl font-bold text-primary-500 ">Leads</h1>
-
-          <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="rounded-md">
-                <Button variant="outline" className="ml-auto">
-                  Fields
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
+      <div className="px-4 py-4">
+        {tableHead}
+        {table.getFilteredSelectedRowModel().rows.length === 0 && (
+          <div className="flex items-center justify-between  max-sm:flex-col max-sm:gap-4">
+            <Input
+              placeholder="Search any..."
+              value={globalFilter ?? ""}
+              onChange={(e) => table.setGlobalFilter(e.target.value)}
+              className="max-w-sm"
+            />
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="rounded-md">
+                  <Button variant="outline" className="ml-auto">
+                    Fields
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
       {/* If something selected */}
       <div className="flex-1 text-sm text-muted-foreground px-4 py-4">
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
@@ -156,19 +174,28 @@ export function DataTable<TData extends { _id: string }, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className="font-bold text-sm"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+            table.getRowModel().rows.map((row, i) => {
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className={cn(
+                    "font-bold text-sm",
+                    clickable && "cursor-pointer",
+                  )}
+                  onClick={() => rowClickAction(row.original._id)}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">

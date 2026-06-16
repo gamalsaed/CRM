@@ -1,7 +1,7 @@
 "use client";
 
 // Hooks
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 
@@ -27,14 +27,23 @@ import { type User, ProjectType } from "../lib/types/app-data.t";
 
 // Actions
 import { assignLeadsAction } from "../lib/actions/leads.action";
+import { assignTeamLeaderAction } from "../lib/services/projects.s";
 
 type dialogProps = {
   data: User[] | ProjectType[];
-  ids: string[];
-  target: "project" | "user";
+  ids: string[] | string;
+  target: "project" | "user" | "team leader";
+  children?: React.ReactNode;
+  successMsg?: string;
 };
 
-export function AssignDialog({ ids, data, target }: dialogProps) {
+export function AssignDialog({
+  ids,
+  data,
+  target,
+  children,
+  successMsg,
+}: dialogProps) {
   // States
   const [selected, setSelected] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -48,10 +57,13 @@ export function AssignDialog({ ids, data, target }: dialogProps) {
   // Mutation
   const { isPending, mutate } = useMutation({
     mutationKey: [`assign-leads-to-${target}`],
-    mutationFn: () => assignLeadsAction(selected!, ids, target),
+    mutationFn: () =>
+      target === "team leader"
+        ? assignTeamLeaderAction(ids as string, selected!)
+        : assignLeadsAction(selected!, ids as string[], target),
     onSuccess: () => {
       setIsOpen(false);
-      toast.success("You have assigned the leads successfully", {
+      toast.success(successMsg || "You have assigned the leads successfully", {
         position: "bottom-right",
       });
       router.refresh();
@@ -66,25 +78,31 @@ export function AssignDialog({ ids, data, target }: dialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <div className="cursor-pointer p-2 text-[12px] transition-colors duration-200 hover:bg-gray-50 flex  items-center gap-3">
-          {target === "user" ? (
-            <CircleUserRound width={16} height={16} />
-          ) : (
-            <FolderOpenDot width={16} height={16} />
-          )}
+        {children ? (
+          children
+        ) : (
+          <div className="cursor-pointer p-2 text-[12px] transition-colors duration-200 hover:bg-gray-50 flex  items-center gap-3">
+            {target === "user" || target === "team leader" ? (
+              <CircleUserRound width={16} height={16} />
+            ) : (
+              <FolderOpenDot width={16} height={16} />
+            )}
 
-          <p>Assign to {target}</p>
-        </div>
+            <p className=" capitalize">Assign to {target}</p>
+          </div>
+        )}
       </DialogTrigger>
       <DialogContent className="rounded-2xl">
         <DialogHeader>
-          <DialogTitle>Select a {target}</DialogTitle>
-          <DialogDescription>
-            Your are about to assign {`(${ids.length})`} leads to a {target}
-          </DialogDescription>
+          <DialogTitle className="capitalize">Select a {target}</DialogTitle>
+          {target !== "team leader" && (
+            <DialogDescription>
+              Your are about to assign {`(${ids.length})`} leads to a {target}
+            </DialogDescription>
+          )}
         </DialogHeader>
         <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-          {data.map((record, i) => {
+          {data?.map((record, i) => {
             return (
               <div key={record._id}>
                 <div

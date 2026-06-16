@@ -5,21 +5,28 @@ import {
   deleteUser,
   getMyInfo,
   updateUser,
-  updatePassword,
+  updateMyPassword,
+  updateUserPassword,
 } from "../Controllers/user-controller";
 import { restrictTo } from "../middlewares/authMiddleware";
 const user_router = express.Router();
 
 user_router.get("/my-info", getMyInfo);
-user_router.patch("/update-user-role", restrictTo("admin"), updateUser);
-user_router.patch("/update-user", updateUser);
-user_router.patch("/change-password", updatePassword);
+user_router.patch("/update-user-role/:userId", restrictTo("admin"), updateUser);
+user_router.patch("/update-user/:userId", updateUser);
+user_router.patch("/update-my-info", updateUser);
+user_router.patch("/change-my-password", updateMyPassword);
+user_router.patch(
+  "/change-password/:userId",
+  restrictTo("admin"),
+  updateUserPassword,
+);
 
 user_router
   .route("/:userId")
   .get(restrictTo("admin", "team leader"), getUser)
   .delete(restrictTo("admin"), deleteUser);
 
-user_router.get("/", restrictTo("admin"), getAllUsers);
+user_router.get("/", restrictTo("admin", "team leader"), getAllUsers);
 
 export default user_router;

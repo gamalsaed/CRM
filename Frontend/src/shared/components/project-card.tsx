@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
 
+// Types
 interface ProjectCardProps {
   name: string;
   createdAt: string;
@@ -11,6 +12,7 @@ interface ProjectCardProps {
   id: string;
 }
 
+// SVG Icon
 const ProjectIcon = () => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
     <rect width="40" height="40" rx="8" fill="#F0EEF8" />
@@ -21,10 +23,10 @@ const ProjectIcon = () => (
 );
 
 export default function ProjectCard({
-  name = "Medical App (iOS native)",
-  createdAt = "Sep 12, 2020",
-  allLeads = 34,
-  assignees = 5,
+  name,
+  createdAt,
+  allLeads,
+  assignees,
   leader,
   id,
 }: ProjectCardProps) {

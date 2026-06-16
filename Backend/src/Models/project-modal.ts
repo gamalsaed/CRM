@@ -1,28 +1,30 @@
 import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const projectSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    leader: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    team: {
+      type: [mongoose.Types.ObjectId],
+      ref: "User",
+    },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  leader: {
-    type: mongoose.Types.ObjectId,
-    ref: "User",
-  },
-  team: {
-    type: [mongoose.Types.ObjectId],
-    ref: "User",
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true },
+);
 
 projectSchema.virtual("leads", {
   ref: "Lead",

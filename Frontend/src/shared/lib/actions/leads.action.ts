@@ -51,5 +51,9 @@ export async function deleteLead(id: string) {
     throw new Error(`Failed to delete lead`);
   }
 
+  if (res.status === 204) {
+    return null;
+  }
+
   return res.json();
 }

@@ -26,7 +26,12 @@ export const getAllProjects = asyncCatch(
 export const createProject = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const fields = safeBodyFields(req.body, PROJECT_FIELDS);
-    const project = await Project.create(fields);
+    const project = await Project.create({
+      ...fields,
+      createdBy: req.user._id,
+    });
+
+    console.log(req);
 
     res.status(201).json({
       status: "success",
@@ -40,9 +45,23 @@ export const createProject = asyncCatch(
 export const getProject = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const project = await Project.findById(req.params.projectId)
-      .populate("leads")
+      .populate({
+        path: "leads",
+        populate: [
+          {
+            path: "assignedTo",
+            select: "name email phone role",
+          },
+          {
+            path: "project",
+            select: "name description",
+          },
+        ],
+      })
+      .populate("createdBy", "name")
       .populate("team", "name email phone")
-      .populate("leader", "name email phone");
+      .populate("leader", "name email phone")
+      .select("-id");
 
     if (!project) return next(new AppError("This project dosen't exist", 404));
 
@@ -73,7 +92,7 @@ export const updateProject = asyncCatch(
 
     const project = await Project.findByIdAndUpdate(
       req.params.projectId,
-      fields,
+      { ...fields, updateddAt: Date.now() },
       {
         new: true,
         runValidators: true,
@@ -183,13 +202,27 @@ export const removeUserFromProject = asyncCatch(
 export const myProjects = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.user._id);
-    if (!user) return next(new AppError("Login again!", 404));
+    if (!user) return next(new AppError("Login again!", 400));
 
     const projects = await Project.find({
       $or: [{ leader: req.user._id }, { team: req.user._id }],
     })
-      .populate("team", "name email")
-      .populate("leader", "name email");
+      .populate({
+        path: "leads",
+        populate: [
+          {
+            path: "assignedTo",
+            select: "name email phone role",
+          },
+          {
+            path: "project",
+            select: "name description",
+          },
+        ],
+      })
+      .populate("createdBy", "name")
+      .populate("team", "name email phone")
+      .populate("leader", "name email phone");
 
     res.status(200).json({
       status: "success",
