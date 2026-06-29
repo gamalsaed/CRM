@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+/** Zod schema for the create/edit project form. */
 export const newProjectSchema = z.object({
   name: z
     .string()

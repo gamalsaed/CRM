@@ -3,6 +3,10 @@ import { useSession } from "next-auth/react";
 import { cn } from "@/shared/lib/utils/utils";
 import stc from "string-to-color";
 
+/**
+ * Displays the current user's avatar (colour derived from email), optional
+ * name, and optional email. Used in both the sidebar footer and header dropdown.
+ */
 export default function UserInfo({
   nameIsVis = false,
   isInfoVisiable,
@@ -14,6 +18,7 @@ export default function UserInfo({
 }) {
   // Hooks
   const { data: session } = useSession();
+
   // Variables
   const color = stc(session?.user.email);
   const name = session?.user.name.split(" ")[0];

@@ -5,6 +5,10 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/auth";
 import getMyToken from "../utils/getToken";
 
+/**
+ * Fetches projects for the current user. Admins receive all projects;
+ * other roles receive only their own assigned projects.
+ */
 export async function getProjects(token: string) {
   const session = await getServerSession(authOptions);
   return catchAsync(async () => {
@@ -27,6 +31,7 @@ export async function getProjects(token: string) {
   });
 }
 
+/** Fetches a single project by ID including its leads, team and leader. */
 export async function getProject(token: string, projectId: string) {
   return catchAsync(async () => {
     const projectApi = await fetch(
@@ -46,7 +51,11 @@ export async function getProject(token: string, projectId: string) {
   });
 }
 
-// Assign Leader "/:projectId/:userId"
+/**
+ * Assigns a team leader to a project.
+ * @param projectId - The project to update.
+ * @param userId - The user to assign as team leader.
+ */
 export async function assignTeamLeaderAction(
   projectId: string,
   userId: string,

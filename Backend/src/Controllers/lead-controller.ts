@@ -66,7 +66,14 @@ export const getAllLeads = asyncCatch(
 
 export const getLead = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const lead = await Lead.findById(req.params.leadId);
+    const lead = await Lead.findById(req.params.leadId)
+      .populate({
+        path: "notes.createdBy",
+        select: "name email role",
+      })
+      .populate("createdBy", "name")
+      .populate("project", "name")
+      .populate("assignedTo", "name");
 
     if (!lead) {
       return next(new AppError("Lead Not Found", 404));
@@ -81,16 +88,58 @@ export const getLead = asyncCatch(
   },
 );
 
-export const createLead = asyncCatch(
+export const createLeads = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const fields = safeBodyFields<Partial<LeadSchema>>(req.body, LEAD_FIELDS);
+    const { leads } = req.body;
 
-    const new_lead = await Lead.create(fields);
+    if (!Array.isArray(leads) || leads.length === 0) {
+      return next(new AppError("Please provide an array of leads", 400));
+    }
 
-    res.status(200).json({
-      status: "success",
+    const createdLeads = [];
+    const skippedLeads = [];
+
+    for (const lead of leads) {
+      const fields = safeBodyFields<Partial<LeadSchema>>(lead, LEAD_FIELDS);
+
+      try {
+        const newLead = await Lead.create({
+          ...fields,
+          createdBy: req.user._id,
+        });
+        createdLeads.push(newLead);
+      } catch (err: any) {
+        if (err.code === 11000) {
+          skippedLeads.push({
+            lead: fields,
+            reason: "Duplicate lead",
+          });
+        } else {
+          skippedLeads.push({
+            lead: fields,
+            reason: err.message || "Invalid lead",
+          });
+        }
+      }
+    }
+
+    if (createdLeads.length === 0) {
+      return next(
+        new AppError(
+          `No leads were created. ${skippedLeads.length} leads were skipped.`,
+          400,
+        ),
+      );
+    }
+
+    res.status(201).json({
+      status: skippedLeads.length > 0 ? "partial_success" : "success",
+      message: `${createdLeads.length} leads created, ${skippedLeads.length} skipped`,
       data: {
-        lead: new_lead,
+        createdCount: createdLeads.length,
+        skippedCount: skippedLeads.length,
+        createdLeads,
+        skippedLeads,
       },
     });
   },
@@ -145,14 +194,14 @@ export const assignLeadToUser = asyncCatch(
 
 export const addNote = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { note, createdBy } = req.body;
+    const { note } = req.body;
     const updatedLead = await Lead.findByIdAndUpdate(
       req.params.leadId,
       {
         $push: {
           notes: {
             note,
-            createdBy,
+            createdBy: req.user._id,
           },
         },
       },
@@ -167,23 +216,38 @@ export const addNote = asyncCatch(
     });
   },
 );
+
 export const removeNote = asyncCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const lead = await Lead.findByIdAndUpdate(
-      req.params.leadId,
-      {
-        $pull: { notes: { _id: req.params.noteId } },
-      },
-      { new: true, runValidators: true },
-    );
+    // First find the lead to check note ownership
+    const lead = await Lead.findById(req.params.leadId);
 
     if (!lead) {
       return next(new AppError("Lead not found!", 404));
     }
 
-    res.status(204).json({
-      status: "success",
-    });
+    const note = lead.notes.find((n) => n._id.toString() === req.params.noteId);
+
+    if (!note) {
+      return next(new AppError("Note not found!", 404));
+    }
+
+    const isOwner = note.createdBy.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === "admin";
+
+    if (!isOwner && !isAdmin) {
+      return next(
+        new AppError("You are not allowed to delete this note!", 403),
+      );
+    }
+
+    await Lead.findByIdAndUpdate(
+      req.params.leadId,
+      { $pull: { notes: { _id: req.params.noteId } } },
+      { new: true, runValidators: true },
+    );
+
+    res.status(204).json({ status: "success" });
   },
 );
 

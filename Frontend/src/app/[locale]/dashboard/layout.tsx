@@ -4,6 +4,10 @@ import AppSidebar from "./_components/app-sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "./_components/header";
 
+/**
+ * Dashboard shell layout. Wraps all dashboard pages with the collapsible
+ * sidebar, tooltip provider, and the top navigation header.
+ */
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full">

@@ -8,6 +8,7 @@ import { formatDate } from "../lib/utils/formateDate";
 import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import ProjectForm from "@/app/[locale]/dashboard/projects/_components/project-form";
+import { useTranslations } from "next-intl";
 
 type ProjectsProps = {
   error?: string | null;
@@ -16,12 +17,15 @@ type ProjectsProps = {
 };
 
 export default function Projects({ data, error, env }: ProjectsProps) {
+  const t = useTranslations("ProjectsLayout");
+
   // State
   const [search, setSearch] = React.useState("");
 
+  // Hooks
   const session = useSession();
 
-  // Filter
+  // Variables — filtered project list derived from the search term.
   const filteredProjects = React.useMemo(() => {
     return data?.filter((project) => {
       const searchValue = search.toLowerCase();
@@ -35,9 +39,9 @@ export default function Projects({ data, error, env }: ProjectsProps) {
       <div className="flex items-center justify-between">
         {env === "page" && (
           <>
-            <h1 className="text-3xl font-bold text-primary-500 ">Projects</h1>{" "}
+            <h1 className="text-3xl font-bold text-primary-500 ">{t("projects")}</h1>{" "}
             <Input
-              placeholder="Search projects..."
+              placeholder={t("searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="max-w-sm"
@@ -60,13 +64,13 @@ export default function Projects({ data, error, env }: ProjectsProps) {
                 createdAt={formatDate(project.createdAt)}
                 allLeads={project.leads.length}
                 assignees={project.team.length}
-                leader={project.leader?.name || "Not Assigned yet"}
+                leader={project.leader?.name || t("notAssigned")}
               />
             );
           })}
       </div>
       {filteredProjects.length === 0 && (
-        <div className="text-center mt-10 text-gray-400">No Results.</div>
+        <div className="text-center mt-10 text-gray-400">{t("noResults")}</div>
       )}
     </>
   );

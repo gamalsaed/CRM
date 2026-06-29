@@ -2,6 +2,10 @@
 import { decode } from "next-auth/jwt";
 import { cookies } from "next/headers";
 
+/**
+ * Reads and decodes the NextAuth session cookie to extract the raw API token.
+ * Must only be called from Server Components or Server Actions.
+ */
 export default async function getMyToken() {
   const encodedToken = (await cookies()).get("next-auth.session-token")?.value;
   const token = await decode({

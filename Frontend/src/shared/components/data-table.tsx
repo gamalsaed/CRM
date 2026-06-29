@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useRouter } from "@/i18n/navigation";
-// Tanstack Table
 import {
   ColumnDef,
   flexRender,
@@ -16,8 +15,6 @@ import {
   VisibilityState,
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
-
-// Shadcn Components
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -36,6 +33,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "../lib/utils/utils";
 import DropDownActions from "./lead-drop-down-action";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData extends { _id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -50,7 +48,8 @@ export function DataTable<TData extends { _id: string }, TValue>({
   clickable = false,
   tableHead,
 }: DataTableProps<TData, TValue>) {
-  // Table States
+  const t = useTranslations("DataTable");
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -60,10 +59,8 @@ export function DataTable<TData extends { _id: string }, TValue>({
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState("");
 
-  // Router
   const router = useRouter();
 
-  // Table Hook
   const table = useReactTable({
     data,
     columns,
@@ -98,13 +95,12 @@ export function DataTable<TData extends { _id: string }, TValue>({
 
   return (
     <div className="overflow-hidden rounded-md border">
-      {/* Table Header */}
       <div className="px-4 py-4">
         {tableHead}
         {table.getFilteredSelectedRowModel().rows.length === 0 && (
           <div className="flex items-center justify-between  max-sm:flex-col max-sm:gap-4">
             <Input
-              placeholder="Search any..."
+              placeholder={t("searchPlaceholder")}
               value={globalFilter ?? ""}
               onChange={(e) => table.setGlobalFilter(e.target.value)}
               className="max-w-sm"
@@ -113,7 +109,7 @@ export function DataTable<TData extends { _id: string }, TValue>({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="rounded-md">
                   <Button variant="outline" className="ml-auto">
-                    Fields
+                    {t("fields")}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -140,19 +136,17 @@ export function DataTable<TData extends { _id: string }, TValue>({
           </div>
         )}
       </div>
-      {/* If something selected */}
       <div className="flex-1 text-sm text-muted-foreground px-4 py-4">
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
           <div className="flex items-center justify-between">
             <p className="text-base font-bold">
-              {table.getFilteredSelectedRowModel().rows.length} Selected
+              {table.getFilteredSelectedRowModel().rows.length} {t("selected")}
             </p>
             <DropDownActions ids={users_ids} bulk={true} />
           </div>
         )}
       </div>
 
-      {/* TABLE */}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -199,14 +193,13 @@ export function DataTable<TData extends { _id: string }, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {t("noResults")}
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
 
-      {/* Pagination */}
       <div className="flex items-center justify-end space-x-2 py-4 pr-4">
         <Button
           variant="outline"
@@ -214,7 +207,7 @@ export function DataTable<TData extends { _id: string }, TValue>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          {t("previous")}
         </Button>
         <Button
           variant="outline"
@@ -222,7 +215,7 @@ export function DataTable<TData extends { _id: string }, TValue>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          {t("next")}
         </Button>
       </div>
     </div>

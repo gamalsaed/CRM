@@ -1,8 +1,11 @@
+"use client";
+
 import stc from "string-to-color";
 import { cn } from "@/shared/lib/utils/utils";
 import { formatDate } from "@/shared/lib/utils/formateDate";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useTranslations } from "next-intl";
 
 import {
   type LucideIcon,
@@ -46,6 +49,7 @@ export default function UserDetails({
   leads,
   projects,
 }: UserDetailsProps) {
+  const t = useTranslations("UserDetails");
   const color = stc(user.email);
 
   const leadsArray =
@@ -56,24 +60,25 @@ export default function UserDetails({
   const qualifiedLeads = leadsArray.filter(
     (lead) => lead.status === "qualified",
   );
+
   const userState = [
     {
-      label: "Assigned Leads",
+      label: t("assignedLeads"),
       value: leadsArray.length.toString(),
       Icon: Headset,
     },
     {
-      label: "Active Projects",
+      label: t("activeProjects"),
       value: projects.length.toString(),
       Icon: BriefcaseBusiness,
     },
     {
-      label: "Team Members",
+      label: t("teamMembers"),
       value: projects.flatMap((project) => project.team).length.toString(),
       Icon: Users,
     },
     {
-      label: "Conversion Rate",
+      label: t("conversionRate"),
       value:
         qualifiedLeads.length === 0
           ? `0%`
@@ -111,18 +116,16 @@ export default function UserDetails({
             </li>
             <li className="flex gap-8">
               <Users size={16} />
-              Sales Team
+              {t("salesTeam")}
             </li>
             <li className="flex gap-8">
               <CalendarIcon size={16} />
-              Joined {formatDate(user.createdAt)}
+              {t("joined")} {formatDate(user.createdAt)}
             </li>
           </ul>
         </div>
         <Separator className="my-2" />
-        <span className="text-sm text-gray-500">
-          Handles project coordination and lead follow-up
-        </span>
+        <span className="text-sm text-gray-500">{t("tagline")}</span>
       </div>
       <div className="flex w-3/5 gap-3 max-lg:w-full max-sm:flex-col">
         {userState.map((state) => {

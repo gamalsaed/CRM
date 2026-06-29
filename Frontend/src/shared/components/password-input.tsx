@@ -5,11 +5,16 @@ import { useState } from "react";
 import { cn } from "../lib/utils/utils";
 import { Eye, EyeOff } from "lucide-react";
 
+/**
+ * Password input with a visibility toggle. Accepts all standard input
+ * attributes and an optional `error` flag to apply destructive border styling.
+ */
 export default function PasswordInput({
   placeholder,
   error,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & { error?: boolean }) {
+  // State
   const [show, setShow] = useState(false);
 
   return (

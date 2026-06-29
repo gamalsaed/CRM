@@ -1,6 +1,7 @@
 export const LEAD_FIELDS = [
   "name",
   "phone",
+  "whatsApp",
   "email",
   "address",
   "status",

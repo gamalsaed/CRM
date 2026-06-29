@@ -1,6 +1,5 @@
 "use client";
 import { useSession } from "next-auth/react";
-import stc from "string-to-color";
 import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { LayoutDashboard, Layers, Users, Headset } from "lucide-react";
@@ -21,37 +20,43 @@ import {
 import { NavMain } from "./nav-main";
 import Image from "next/image";
 import { ROLES } from "@/shared/lib/constant";
-const data = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-    allowedTo: ROLES,
-  },
-  {
-    title: "Projects",
-    url: "/dashboard/projects",
-    icon: Layers,
-    allowedTo: ROLES,
-  },
-  {
-    title: "Employees",
-    url: "/dashboard/employees",
-    icon: Users,
-    allowedTo: ROLES.slice(0, 1),
-  },
-  {
-    title: "Leads",
-    url: "/dashboard/leads",
-    icon: Headset,
-    allowedTo: ROLES,
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function AppSidebar() {
-  // Hooks
   const { data: session } = useSession();
   const { state } = useSidebar();
+  const t = useTranslations("AppSidebar");
+
+  const data = [
+    {
+      title: "Dashboard",
+      displayTitle: t("dashboard"),
+      url: "/dashboard",
+      icon: LayoutDashboard,
+      allowedTo: ROLES,
+    },
+    {
+      title: "Projects",
+      displayTitle: t("projects"),
+      url: "/dashboard/projects",
+      icon: Layers,
+      allowedTo: ROLES,
+    },
+    {
+      title: "Employees",
+      displayTitle: t("employees"),
+      url: "/dashboard/employees",
+      icon: Users,
+      allowedTo: ROLES.slice(0, 1),
+    },
+    {
+      title: "Leads",
+      displayTitle: t("leads"),
+      url: "/dashboard/leads",
+      icon: Headset,
+      allowedTo: ROLES,
+    },
+  ];
 
   return (
     <Sidebar collapsible="icon">
@@ -65,7 +70,6 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      {/* Sidebar Body */}
       <SidebarContent className="w-full bg-white">
         <NavMain items={data} />
       </SidebarContent>
@@ -90,7 +94,7 @@ export default function AppSidebar() {
                   )}
                 >
                   <LogOut className="w-4 h-4 " />
-                  {state !== "collapsed" && <span>Sign Out</span>}
+                  {state !== "collapsed" && <span>{t("signOut")}</span>}
                 </div>
               </SidebarMenuItem>
             </SidebarMenu>

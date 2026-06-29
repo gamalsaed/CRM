@@ -5,9 +5,15 @@ import { User } from "../../../../shared/lib/types/app-data.t";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import UserDropDownActions from "@/shared/components/user-drop-down-action";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-export const getUserColumns = (): ColumnDef<User>[] => {
+export const useUserColumns = (env: "page" | "project"): ColumnDef<User>[] => {
   const session = useSession();
+  const params = useParams();
+  const t = useTranslations("UsersColumns");
+
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "name",
@@ -18,7 +24,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Name
+            {t("name")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -33,7 +39,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Email
+            {t("email")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -48,7 +54,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Phone
+            {t("phone")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -66,7 +72,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Role
+            {t("role")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -77,15 +83,22 @@ export const getUserColumns = (): ColumnDef<User>[] => {
     },
   ];
 
-  // if (["admin", "team leader"].includes(session.data?.user.role!)) {
-  //   columns.push({
-  //     id: "actions",
-  //     header: ({ column }) => "Actions",
-  //     cell: ({ row }) => {
-  //       return <DropDownActions ids={[row.original._id]} />;
-  //     },
-  //   });
-  // }
+  if (env === "project") {
+    if (["admin", "team leader"].includes(session.data?.user.role!)) {
+      columns.push({
+        id: "actions",
+        header: () => t("actions"),
+        cell: ({ row }) => {
+          return (
+            <UserDropDownActions
+              userId={row.original._id}
+              projectId={params.id as string}
+            />
+          );
+        },
+      });
+    }
+  }
 
   return columns;
 };

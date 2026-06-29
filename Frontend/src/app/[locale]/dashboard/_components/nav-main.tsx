@@ -17,16 +17,15 @@ export function NavMain({
 }: {
   items: {
     title: string;
+    displayTitle: string;
     url: string;
     icon?: LucideIcon;
     allowedTo: string[];
   }[];
 }) {
-  // Hooks
   const { data } = useSession();
   const pathname = usePathname();
 
-  //  Variables
   const navs = (
     <SidebarMenu className="w-full">
       {items.map((item) => {
@@ -35,7 +34,7 @@ export function NavMain({
             <Link href={item.url} key={item.title} className="mb-2">
               <SidebarMenuItem className=" w-full flex justify-center ">
                 <SidebarMenuButton
-                  tooltip={item.title}
+                  tooltip={item.displayTitle}
                   className={cn(
                     " w-full cursor-pointer  m-0 transition-colors rounded-md hover:bg-primary-50",
                     pathname.endsWith(item.title.toLowerCase()) &&
@@ -45,7 +44,7 @@ export function NavMain({
                   {item.icon && (
                     <item.icon className="w-5! pr-1 h-5! text-gray-600" />
                   )}
-                  <span className="text-[13px]">{item.title}</span>
+                  <span className="text-[13px]">{item.displayTitle}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </Link>

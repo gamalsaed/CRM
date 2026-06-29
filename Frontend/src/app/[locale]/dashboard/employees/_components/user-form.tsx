@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -29,23 +29,21 @@ import {
 import { cn } from "@/shared/lib/utils/utils";
 import PasswordInput from "@/shared/components/password-input";
 import {
-  newUserSchema,
+  makeNewUserSchema,
   type NewUserFormValues,
 } from "@/shared/lib/schemas/users.s";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
-// ─── Role Options ─────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-const ROLE_OPTIONS = [
-  { value: "user", label: "User" },
-  { value: "data entry", label: "Data Entry" },
-  { value: "team leader", label: "Team Leader" },
-  { value: "admin", label: "Admin" },
-];
+/** Selectable role options for the new-user form. */
+const ROLE_OPTION_VALUES = ["user", "data entry", "team leader", "admin"] as const;
 
-// ─── Reusable Field ───────────────────────────────────────────────────────────
+// ─── Field ────────────────────────────────────────────────────────────────────
 
+/** Labelled form field wrapper with an optional required indicator and error message. */
 function Field({
   label,
   required,
@@ -71,26 +69,45 @@ function Field({
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function UserForm({ children }: { children: ReactNode }) {
+/**
+ * Dialog-based form for creating a new user. Resets all fields when closed.
+ * The dialog trigger is the `children` element passed by the parent.
+ */
+export default function UserForm() {
+  const tv = useTranslations("Validation");
+  const t = useTranslations("UserForm");
+
+  const ROLE_OPTIONS = [
+    { value: "user", label: t("roleUser") },
+    { value: "data entry", label: t("roleDataEntry") },
+    { value: "team leader", label: t("roleTeamLeader") },
+    { value: "admin", label: t("roleAdmin") },
+  ];
+
+  // State
   const [open, setOpen] = useState(false);
+
+  // Navigation
   const router = useRouter();
 
+  // Mutation
   const { mutate, isPending } = useMutation({
     mutationFn: createUserAction,
     onSuccess: () => {
-      toast.success("User has been added successfully", {
+      toast.success(t("successMsg"), {
         position: "bottom-right",
       });
       setOpen(false);
       router.refresh();
     },
     onError: (err) => {
-      toast.error(err.message || "Something went wrong!", {
+      toast.error(err.message || t("errorFallback"), {
         position: "bottom-right",
       });
     },
   });
 
+  // Form & Validation
   const {
     register,
     handleSubmit,
@@ -99,7 +116,7 @@ export default function UserForm({ children }: { children: ReactNode }) {
     watch,
     formState: { errors },
   } = useForm<NewUserFormValues>({
-    resolver: zodResolver(newUserSchema),
+    resolver: zodResolver(makeNewUserSchema(tv)),
     defaultValues: {
       name: "",
       email: "",
@@ -120,12 +137,14 @@ export default function UserForm({ children }: { children: ReactNode }) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button className="w-fit">{t("newEmployee")}</Button>
+      </DialogTrigger>
 
       <DialogContent className="sm:max-w-[520px] rounded-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
-            Create New User
+            {t("createTitle")}
           </DialogTitle>
         </DialogHeader>
 
@@ -134,35 +153,35 @@ export default function UserForm({ children }: { children: ReactNode }) {
           className="space-y-5 pt-2"
         >
           {/* Name */}
-          <Field label="Full Name" required error={errors.name?.message}>
+          <Field label={t("fullName")} required error={errors.name?.message}>
             <Input
-              placeholder="e.g. Mona Khaled"
+              placeholder={t("namePlaceholder")}
               autoFocus
               className={cn(errors.name && "border-destructive")}
               {...register("name")}
             />
           </Field>
           {/* Email */}
-          <Field label="Email Address" required error={errors.email?.message}>
+          <Field label={t("emailAddress")} required error={errors.email?.message}>
             <Input
               type="email"
-              placeholder="e.g. mona@example.com"
+              placeholder={t("emailPlaceholder")}
               className={cn(errors.email && "border-destructive")}
               {...register("email")}
             />
           </Field>
           {/* Phone + Role — side by side */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Phone Number" required error={errors.phone?.message}>
+            <Field label={t("phoneNumber")} required error={errors.phone?.message}>
               <Input
                 type="tel"
-                placeholder="+201012345678"
+                placeholder={t("phonePlaceholder")}
                 className={cn(errors.phone && "border-destructive")}
                 {...register("phone")}
               />
             </Field>
 
-            <Field label="Role" required error={errors.role?.message}>
+            <Field label={t("role")} required error={errors.role?.message}>
               <Select
                 onValueChange={(val) =>
                   setValue("role", val as NewUserFormValues["role"], {
@@ -177,7 +196,7 @@ export default function UserForm({ children }: { children: ReactNode }) {
                     errors.role && "border-destructive",
                   )}
                 >
-                  <SelectValue placeholder="Select role" />
+                  <SelectValue placeholder={t("selectRole")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl">
                   {ROLE_OPTIONS.map((r) => (
@@ -196,26 +215,26 @@ export default function UserForm({ children }: { children: ReactNode }) {
             </div>
             <div className="relative flex justify-center">
               <span className="bg-background px-3 text-xs text-muted-foreground">
-                Security
+                {t("security")}
               </span>
             </div>
           </div>
           {/* Password */}
-          <Field label="Password" required error={errors.password?.message}>
+          <Field label={t("password")} required error={errors.password?.message}>
             <PasswordInput
-              placeholder="Min 8 chars, uppercase, number, special"
+              placeholder={t("passwordPlaceholder")}
               error={!!errors.password}
               {...register("password")}
             />
           </Field>
           {/* Confirm Password */}
           <Field
-            label="Confirm Password"
+            label={t("confirmPassword")}
             required
             error={errors.confirmPassword?.message}
           >
             <PasswordInput
-              placeholder="Re-enter the password"
+              placeholder={t("confirmPasswordPlaceholder")}
               error={!!errors.confirmPassword}
               {...register("confirmPassword")}
             />
@@ -223,7 +242,7 @@ export default function UserForm({ children }: { children: ReactNode }) {
 
           <DialogFooter className="pt-2">
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Creating..." : "Create User"}
+              {isPending ? t("creating") : t("createUser")}
             </Button>
           </DialogFooter>
         </form>

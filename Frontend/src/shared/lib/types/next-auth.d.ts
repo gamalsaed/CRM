@@ -1,10 +1,11 @@
 import { User } from "next-auth";
 import { UserResponse } from "./api-types";
 
+/**
+ * Module augmentation to extend NextAuth's built-in types with the backend
+ * API token and user profile so they are available on the session object.
+ */
 declare module "next-auth" {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
   interface User {
     accessToken: string;
     user: UserResponse;

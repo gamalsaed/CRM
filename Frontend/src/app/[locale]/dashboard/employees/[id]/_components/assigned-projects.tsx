@@ -1,26 +1,31 @@
+"use client";
+
 import { ProjectType } from "@/shared/lib/types/app-data.t";
 import { FolderOpen } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslations } from "next-intl";
 
 export default function AssignedProjects({
   projects,
 }: {
   projects: ProjectType[];
 }) {
+  const t = useTranslations("AssignedProjects");
+
   return (
     <div className="border border-gray-200 rounded-xl col-span-2  p-5 mt-4 max-lg:col-span-3 max-lg:h-fit">
       <div className="flex items-center  gap-4">
         <div className="bg-primary-50 w-fit p-2 rounded-full">
           <FolderOpen className="text-primary-400" size={20} />
         </div>
-        <span className="font-semibold">Assigned Projects</span>
+        <span className="font-semibold">{t("title")}</span>
       </div>
       <div className="flex flex-col gap-2 mt-4">
         <div className="text-sm font-semibold w-full grid grid-cols-3 items-center bg-gray-100 p-2  rounded-t-2xl">
-          <span>Name</span>
-          <span className="text-center">Leads</span>
-          <span className="text-center">Team Members</span>
+          <span>{t("name")}</span>
+          <span className="text-center">{t("leads")}</span>
+          <span className="text-center">{t("teamMembers")}</span>
         </div>
         {projects.length > 0 && (
           <ScrollArea className="h-14 max-sm:h-28">
@@ -42,7 +47,7 @@ export default function AssignedProjects({
         )}
       </div>
       {projects.length === 0 && (
-        <div className=" text-center mt-2">No Projects.</div>
+        <div className=" text-center mt-2">{t("noProjects")}</div>
       )}
     </div>
   );

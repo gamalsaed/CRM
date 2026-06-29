@@ -8,6 +8,7 @@ export interface LeadSchema {
   address: string;
   createdAt: Date;
   project: ObjectId;
+  createdBy: ObjectId;
   source:
     | "tik tok"
     | "snapchat"

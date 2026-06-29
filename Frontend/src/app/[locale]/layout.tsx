@@ -1,4 +1,5 @@
 import { hasLocale } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Providers } from "@/shared/providers/index.p";
@@ -31,6 +32,10 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
+/**
+ * Root layout for all locale-prefixed routes. Validates the locale from the
+ * URL, applies global fonts and wraps the page tree with shared providers.
+ */
 export default async function RootLayout({
   children,
   params,
@@ -40,13 +45,16 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  const messages = await getMessages();
+
   return (
     <html
       lang={locale}
       className={`${hankenGrotesk.variable} font-sans ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body>
-        <Providers locale={locale}>{children}</Providers>
+        <Providers locale={locale} messages={messages}>{children}</Providers>
         <Toaster />
       </body>
     </html>

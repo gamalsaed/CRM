@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useLogin } from "@/shared/hooks/use-login";
 import * as z from "zod";
 import { ErrorBox } from "@/shared/components/error_box";
+import { useTranslations } from "next-intl";
 // Shadcn
 import { Button } from "@/components/ui/button";
 import { loginSchema } from "@/shared/lib/schemas/auth.s";
@@ -18,10 +19,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
-  // Custom Hook
+  const t = useTranslations("LoginPage");
   const { login, error, isPending } = useLogin();
-  console.log("Error: ", error);
-  // React Hook Form
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,9 +31,7 @@ export default function LoginForm() {
     },
   });
 
-  // Functions
   function onSubmit(data: z.infer<typeof loginSchema>) {
-    console.log(data);
     login(data);
   }
 
@@ -49,12 +47,12 @@ export default function LoginForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-email">Email</FieldLabel>
+              <FieldLabel htmlFor="form-email">{t("email")}</FieldLabel>
               <Input
                 {...field}
                 id="form-email"
                 aria-invalid={fieldState.invalid}
-                placeholder="Enter your email"
+                placeholder={t("emailPlaceholder")}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -65,13 +63,13 @@ export default function LoginForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-password">Password</FieldLabel>
+              <FieldLabel htmlFor="form-password">{t("password")}</FieldLabel>
               <Input
                 {...field}
                 type="password"
                 id="form-password"
                 aria-invalid={fieldState.invalid}
-                placeholder="Enter your Password"
+                placeholder={t("passwordPlaceholder")}
                 autoComplete="off"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -94,7 +92,7 @@ export default function LoginForm() {
                 htmlFor="rememberMe-checkbox"
                 className="cursor-pointer capitalize"
               >
-                Remember Me
+                {t("rememberMe")}
               </Label>
             </Field>
           )}
@@ -102,7 +100,7 @@ export default function LoginForm() {
       </FieldGroup>
       {error && <ErrorBox error={`${error}`} />}
       <Button type="submit" form="form-rhf-demo" disabled={isPending}>
-        {isPending ? "Signing in..." : "Sign in to G-CRM"}
+        {isPending ? t("signingIn") : t("signIn")}
       </Button>
     </form>
   );

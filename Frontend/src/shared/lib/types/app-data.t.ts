@@ -1,3 +1,4 @@
+/** Represents a single CRM lead record. */
 export type LeadType = {
   name: string;
   _id: string;
@@ -34,6 +35,7 @@ export type LeadType = {
   };
 };
 
+/** Represents a system user (employee). */
 export type User = {
   _id: string;
   name: string;
@@ -44,6 +46,7 @@ export type User = {
   createdAt: string;
 };
 
+/** Represents a CRM project with its associated leads, team and leader. */
 export type ProjectType = {
   _id: string;
   name: string;

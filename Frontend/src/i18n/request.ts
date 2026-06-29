@@ -2,8 +2,12 @@ import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { routing } from "./routing";
 
+/**
+ * Per-request i18n config. Falls back to the default locale when the
+ * requested locale is not in the supported list, then loads the matching
+ * translation messages JSON.
+ */
 export default getRequestConfig(async ({ requestLocale }) => {
-  // Static for now, we'll change this later
   const requested = await requestLocale;
   const locale = hasLocale(routing.locales, requested)
     ? requested

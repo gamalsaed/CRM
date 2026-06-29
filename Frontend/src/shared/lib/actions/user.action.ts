@@ -3,6 +3,10 @@
 import getMyToken from "../utils/getToken";
 import { User } from "../types/app-data.t";
 
+/**
+ * Fetches all users. An optional query string can be appended to filter
+ * results (e.g. `role=team leader`).
+ */
 export async function getUsersAction(query?: string) {
   const token = await getMyToken();
 
@@ -23,6 +27,11 @@ export async function getUsersAction(query?: string) {
   return await res.json();
 }
 
+/**
+ * Fetches a single user by ID, or the current session user when no ID is
+ * given. Returns null when the user is not found (invalid ObjectId or
+ * "User not found!" message from the API).
+ */
 export async function getUserDetailsAction(id?: string) {
   const token = await getMyToken();
 
@@ -57,6 +66,7 @@ type CreateUserParams = { confirmPassword: string; password: string } & Omit<
   "_id" | "createdAt" | "passwordChangedAt"
 >;
 
+/** Creates a new user account via the signup endpoint. */
 export async function createUserAction(user: Partial<CreateUserParams>) {
   const token = await getMyToken();
 
@@ -78,6 +88,10 @@ export async function createUserAction(user: Partial<CreateUserParams>) {
 
 type UpdateUserProps = Omit<User, "_id" | "createdAt" | "passwordChangedAt">;
 
+/**
+ * Updates a user's basic info fields. Strips undefined values before sending
+ * so only changed fields are sent to the API.
+ */
 export async function updateUserAction(
   user: Partial<UpdateUserProps>,
   id: string,
@@ -110,6 +124,7 @@ export async function updateUserAction(
   return data;
 }
 
+/** Updates the role of a user, which also changes their effective permissions. */
 export async function updateUserRoleAction(userId: string, role: string) {
   const token = await getMyToken();
   const res = await fetch(
@@ -125,7 +140,6 @@ export async function updateUserRoleAction(userId: string, role: string) {
   );
 
   const data = await res.json().catch(() => null);
-  console.log(data);
   if (!res.ok) {
     throw new Error(data?.message || "Failed to update the user role!");
   }
@@ -138,6 +152,10 @@ type ChangePasswordParams = {
   confirmPassword: string;
 };
 
+/**
+ * Changes the password for a user. Admins can set a password directly
+ * by providing only `newPassword` and `confirmPassword`.
+ */
 export async function changePasswordAction(
   data: ChangePasswordParams,
   userId: string,
@@ -165,6 +183,10 @@ export async function changePasswordAction(
   return result;
 }
 
+/**
+ * Permanently deletes a user by ID. Parses the error body from both JSON and
+ * plain-text responses to surface a meaningful error message.
+ */
 export async function deleteUserAction(userId: string): Promise<void> {
   const token = await getMyToken();
 

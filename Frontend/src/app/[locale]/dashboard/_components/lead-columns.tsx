@@ -9,13 +9,23 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { restrictTo } from "@/shared/lib/utils/restrictTo";
 import DropDownActions from "@/shared/components/lead-drop-down-action";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 type LeadRowType = Pick<
   LeadType,
   "_id" | "name" | "source" | "email" | "status" | "project" | "assignedTo"
 >;
-export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
+
+export const useLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
+  // Hooks
   const session = useSession();
+  const router = useRouter();
+  const t = useTranslations("LeadColumns");
+
+  function handleClick(id: string) {
+    router.push(`/dashboard/leads/${id}`);
+  }
 
   const columns: ColumnDef<LeadRowType>[] = [
     {
@@ -61,9 +71,19 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Name
+            {t("name")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <span
+            className="cursor-pointer"
+            onClick={() => handleClick(row.original._id)}
+          >
+            {row.original.name}
+          </span>
         );
       },
     },
@@ -76,9 +96,19 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Email
+            {t("email")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <span
+            className="cursor-pointer"
+            onClick={() => handleClick(row.original._id)}
+          >
+            {row.original.email}
+          </span>
         );
       },
     },
@@ -132,7 +162,7 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Status
+            {t("status")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -140,7 +170,7 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
     },
     {
       accessorKey: "project",
-      accessorFn: (row) => row.project?.name ?? "No Project",
+      accessorFn: (row) => row.project?.name ?? t("noProject"),
       header: ({ column }) => {
         return (
           <Button
@@ -148,18 +178,18 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Project
+            {t("project")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => {
-        return <span>{row.original.project?.name || "No Project"}</span>;
+        return <span>{row.original.project?.name || t("noProject")}</span>;
       },
     },
     {
       accessorKey: "user",
-      accessorFn: (row) => row.assignedTo?.name ?? "Not assigned yet",
+      accessorFn: (row) => row.assignedTo?.name ?? t("notAssignedYet"),
       header: ({ column }) => {
         return (
           <Button
@@ -167,14 +197,14 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Assigned To
+            {t("assignedTo")}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => {
         return (
-          <span>{row.original.assignedTo?.name || "Not assigned yet"}</span>
+          <span>{row.original.assignedTo?.name || t("notAssignedYet")}</span>
         );
       },
     },
@@ -187,7 +217,7 @@ export const getLeadColumns = (role?: string): ColumnDef<LeadRowType>[] => {
     columns.push({
       id: "actions",
       header: ({ column }) => (
-        <span className="text-base text-gray-500">Actions</span>
+        <span className="text-base text-gray-500">{t("actions")}</span>
       ),
       cell: ({ row }) => {
         return <DropDownActions ids={[row.original._id]} />;

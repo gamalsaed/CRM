@@ -17,6 +17,7 @@ import { getProjectsAction } from "@/shared/lib/actions/projects.action";
 import { deleteLead } from "@/shared/lib/actions/leads.action";
 import DeleteDialog from "./delete-dialog";
 import { restrictTo } from "@/shared/lib/utils/restrictTo";
+import { useTranslations } from "next-intl";
 
 export default function DropDownActions({
   ids,
@@ -25,9 +26,9 @@ export default function DropDownActions({
   ids: string[];
   bulk?: boolean;
 }) {
-  // Session
   const { data } = useSession();
-  // Queries
+  const t = useTranslations("LeadDropDown");
+
   const {
     data: users,
     error: usersError,
@@ -53,10 +54,8 @@ export default function DropDownActions({
     enabled: data?.user?.role === "admin",
   });
 
-  // Variables
   let error = projectsError || usersError;
 
-  // Statments
   if (usersError) {
     return <ErrorBox error={error?.message} />;
   }
@@ -85,12 +84,12 @@ export default function DropDownActions({
               </div>
               {!bulk && (
                 <DeleteDialog
-                  id={ids[0]}
+                  args={[ids[0]]}
                   deleteFn={deleteLead}
-                  successMsg="You have deleted the lead successfully"
-                  failMsg="Something went wrong!"
-                  description="This action cannot be undone. The selected leads will be permanently removed."
-                  title="Delete leads"
+                  successMsg={t("deleteSuccessMsg")}
+                  failMsg={t("deleteFailMsg")}
+                  description={t("deleteDescription")}
+                  title={t("deleteTitle")}
                 />
               )}
             </>

@@ -1,3 +1,4 @@
+/** Dashboard loading skeleton — shows a pulsing spinner while the page streams in. */
 export default function loading() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">

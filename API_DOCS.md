@@ -13,14 +13,15 @@ Tokens are issued by the login endpoint and expire after **7 days**. If a user c
 
 ## Roles & Permission Overview
 
-| Role | Description |
-|---|---|
-| `admin` | Full access to everything |
+| Role          | Description                                            |
+| ------------- | ------------------------------------------------------ |
+| `admin`       | Full access to everything                              |
 | `team leader` | Can manage their team and projects they lead/belong to |
-| `data entry` | Basic authenticated access |
-| `user` | Can only see leads assigned to them |
+| `data entry`  | Basic authenticated access                             |
+| `user`        | Can only see leads assigned to them                    |
 
 Legend used in this document:
+
 - **Public** — No token required
 - **Auth** — Any authenticated user (valid token)
 - **Team Leader+** — `team leader` or `admin`
@@ -31,11 +32,13 @@ Legend used in this document:
 ## Auth
 
 ### POST `/auth/login`
+
 **Permission:** Public
 
 Authenticates a user and returns a JWT token.
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -44,6 +47,7 @@ Authenticates a user and returns a JWT token.
 ```
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -62,11 +66,13 @@ Authenticates a user and returns a JWT token.
 ---
 
 ### POST `/auth/signup`
+
 **Permission:** Admin
 
 Creates a new user account. Only admins can create accounts.
 
 **Request Body:**
+
 ```json
 {
   "name": "Jane Doe",
@@ -82,6 +88,7 @@ Creates a new user account. Only admins can create accounts.
 > Password must be strong: 8+ chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special character.
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -102,11 +109,13 @@ Creates a new user account. Only admins can create accounts.
 ## Users
 
 ### GET `/users/my-info`
+
 **Permission:** Auth
 
 Returns the currently authenticated user's profile.
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -125,6 +134,7 @@ Returns the currently authenticated user's profile.
 ---
 
 ### GET `/users`
+
 **Permission:** Team Leader+
 
 Returns all users. Team leaders only see members of projects they lead or belong to.
@@ -138,6 +148,7 @@ Returns all users. Team leaders only see members of projects they lead or belong
 | `fields` | string | Comma-separated fields to include (e.g. `name,email`) |
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -151,11 +162,13 @@ Returns all users. Team leaders only see members of projects they lead or belong
 ---
 
 ### GET `/users/:userId`
+
 **Permission:** Team Leader+
 
 Returns a specific user's profile along with their associated projects and assigned leads.
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -170,6 +183,7 @@ Returns a specific user's profile along with their associated projects and assig
 ---
 
 ### DELETE `/users/:userId`
+
 **Permission:** Admin
 
 Permanently deletes a user.
@@ -179,11 +193,13 @@ Permanently deletes a user.
 ---
 
 ### PATCH `/users/update-my-info`
+
 **Permission:** Auth
 
 Updates the currently authenticated user's name, email, or phone.
 
 **Request Body (any subset):**
+
 ```json
 {
   "name": "New Name",
@@ -193,6 +209,7 @@ Updates the currently authenticated user's name, email, or phone.
 ```
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -203,11 +220,13 @@ Updates the currently authenticated user's name, email, or phone.
 ---
 
 ### PATCH `/users/update-user/:userId`
+
 **Permission:** Auth
 
 Updates basic info (name, email, phone) for any user by ID.
 
 **Request Body (any subset):**
+
 ```json
 {
   "name": "Updated Name",
@@ -217,6 +236,7 @@ Updates basic info (name, email, phone) for any user by ID.
 ```
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -227,11 +247,13 @@ Updates basic info (name, email, phone) for any user by ID.
 ---
 
 ### PATCH `/users/update-user-role/:userId`
+
 **Permission:** Admin
 
 Changes a user's role.
 
 **Request Body:**
+
 ```json
 {
   "role": "team leader"
@@ -241,6 +263,7 @@ Changes a user's role.
 > `role` must be one of: `admin`, `team leader`, `data entry`, `user`
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -251,11 +274,13 @@ Changes a user's role.
 ---
 
 ### PATCH `/users/change-my-password`
+
 **Permission:** Auth
 
 Allows the current user to change their own password. Issues a new token on success.
 
 **Request Body:**
+
 ```json
 {
   "oldPassword": "OldPass1!",
@@ -265,6 +290,7 @@ Allows the current user to change their own password. Issues a new token on succ
 ```
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -275,11 +301,13 @@ Allows the current user to change their own password. Issues a new token on succ
 ---
 
 ### PATCH `/users/change-password/:userId`
+
 **Permission:** Admin
 
 Admin resets another user's password without needing the old one.
 
 **Request Body:**
+
 ```json
 {
   "newPassword": "NewPass1!",
@@ -288,6 +316,7 @@ Admin resets another user's password without needing the old one.
 ```
 
 **Response `201`:**
+
 ```json
 {
   "status": "success"
@@ -301,9 +330,11 @@ Admin resets another user's password without needing the old one.
 All lead endpoints require authentication. Role-based filtering is applied server-side.
 
 ### GET `/leads`
+
 **Permission:** Auth
 
 Returns leads. Results are filtered by role:
+
 - **Admin / Data Entry** — All leads with full populate (project, assignedTo)
 - **Team Leader** — Leads belonging to projects they lead or are a member of
 - **User** — Only leads assigned to them
@@ -323,6 +354,7 @@ Returns leads. Results are filtered by role:
 | `limit` | number | Results per page |
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -349,11 +381,13 @@ Returns leads. Results are filtered by role:
 ---
 
 ### POST `/leads`
+
 **Permission:** Auth
 
 Creates a new lead.
 
 **Request Body:**
+
 ```json
 {
   "name": "Lead Name",
@@ -365,16 +399,17 @@ Creates a new lead.
 }
 ```
 
-| Field | Required | Values |
-|---|---|---|
-| `name` | Yes | string |
-| `phone` | Yes | valid mobile number |
-| `email` | No | valid email |
-| `address` | No | string |
-| `status` | No | `new`, `contacted`, `qualified`, `closed`, `lost`, `problem`, `solved` — default: `new` |
-| `source` | No | `tik tok`, `snapchat`, `facebook`, `instagram`, `recommended`, `other` — default: `other` |
+| Field     | Required | Values                                                                                    |
+| --------- | -------- | ----------------------------------------------------------------------------------------- |
+| `name`    | Yes      | string                                                                                    |
+| `phone`   | Yes      | valid mobile number                                                                       |
+| `email`   | No       | valid email                                                                               |
+| `address` | No       | string                                                                                    |
+| `status`  | No       | `new`, `contacted`, `qualified`, `closed`, `lost`, `problem`, `solved` — default: `new`   |
+| `source`  | No       | `tik tok`, `snapchat`, `facebook`, `instagram`, `recommended`, `other` — default: `other` |
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -385,11 +420,13 @@ Creates a new lead.
 ---
 
 ### GET `/leads/status-stats`
+
 **Permission:** Auth
 
 Returns a count of leads grouped by status. Users only see counts for their assigned leads.
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -410,11 +447,13 @@ Returns a count of leads grouped by status. Users only see counts for their assi
 ---
 
 ### GET `/leads/:leadId`
+
 **Permission:** Auth
 
 Returns a single lead by ID.
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -425,11 +464,13 @@ Returns a single lead by ID.
 ---
 
 ### PATCH `/leads/:leadId`
+
 **Permission:** Auth
 
 Updates a lead's fields.
 
 **Request Body (any subset of allowed fields):**
+
 ```json
 {
   "name": "Updated Name",
@@ -440,6 +481,7 @@ Updates a lead's fields.
 ```
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -450,6 +492,7 @@ Updates a lead's fields.
 ---
 
 ### DELETE `/leads/:leadId`
+
 **Permission:** Admin
 
 Permanently deletes a lead.
@@ -459,11 +502,13 @@ Permanently deletes a lead.
 ---
 
 ### POST `/leads/:leadId/notes`
+
 **Permission:** Auth
 
 Adds a note to a lead.
 
 **Request Body:**
+
 ```json
 {
   "note": "Called the client, no answer.",
@@ -474,6 +519,7 @@ Adds a note to a lead.
 > `note` must be at least 5 characters. `createdBy` must be a valid User ID.
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -484,6 +530,7 @@ Adds a note to a lead.
 ---
 
 ### DELETE `/leads/:leadId/notes/:noteId`
+
 **Permission:** Auth
 
 Removes a specific note from a lead.
@@ -493,11 +540,13 @@ Removes a specific note from a lead.
 ---
 
 ### PATCH `/leads/assign-to-user/:userId`
+
 **Permission:** Team Leader+
 
 Bulk-assigns a list of leads to a specific user.
 
 **Request Body:**
+
 ```json
 {
   "leads": ["leadId1", "leadId2", "leadId3"]
@@ -505,6 +554,7 @@ Bulk-assigns a list of leads to a specific user.
 ```
 
 **Response `203`:**
+
 ```json
 {
   "status": "success"
@@ -514,11 +564,13 @@ Bulk-assigns a list of leads to a specific user.
 ---
 
 ### PATCH `/leads/assign-to-project/:projectId`
+
 **Permission:** Auth
 
 Bulk-assigns a list of leads to a specific project.
 
 **Request Body:**
+
 ```json
 {
   "leads": ["leadId1", "leadId2"]
@@ -526,6 +578,7 @@ Bulk-assigns a list of leads to a specific project.
 ```
 
 **Response `200`:**
+
 ```json
 {
   "status": "success"
@@ -537,11 +590,13 @@ Bulk-assigns a list of leads to a specific project.
 ## Projects
 
 ### GET `/projects`
+
 **Permission:** Admin
 
 Returns all projects with fully populated leads, leader, and team.
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -567,11 +622,13 @@ Returns all projects with fully populated leads, leader, and team.
 ---
 
 ### POST `/projects`
+
 **Permission:** Admin
 
 Creates a new project. The `createdBy` field is automatically set to the authenticated admin.
 
 **Request Body:**
+
 ```json
 {
   "name": "Project Alpha",
@@ -580,6 +637,7 @@ Creates a new project. The `createdBy` field is automatically set to the authent
 ```
 
 **Response `201`:**
+
 ```json
 {
   "status": "success",
@@ -590,11 +648,13 @@ Creates a new project. The `createdBy` field is automatically set to the authent
 ---
 
 ### GET `/projects/my-projects`
+
 **Permission:** Auth
 
 Returns all projects where the current user is either the `leader` or a `team` member.
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -608,11 +668,13 @@ Returns all projects where the current user is either the `leader` or a `team` m
 ---
 
 ### GET `/projects/:projectId`
+
 **Permission:** Auth
 
 Returns full details for a single project, including all leads, team members, and leader.
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -641,11 +703,13 @@ Returns full details for a single project, including all leads, team members, an
 ---
 
 ### PATCH `/projects/:projectId`
+
 **Permission:** Admin
 
 Updates a project's name or description.
 
 **Request Body (any subset):**
+
 ```json
 {
   "name": "New Project Name",
@@ -654,6 +718,7 @@ Updates a project's name or description.
 ```
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -664,6 +729,7 @@ Updates a project's name or description.
 ---
 
 ### DELETE `/projects/:projectId`
+
 **Permission:** Admin
 
 Permanently deletes a project.
@@ -673,11 +739,13 @@ Permanently deletes a project.
 ---
 
 ### PATCH `/projects/:projectId/:userId`
+
 **Permission:** Admin
 
 Assigns a user as the project leader. The user must have the role `team leader` or `admin`.
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -688,11 +756,13 @@ Assigns a user as the project leader. The user must have the role `team leader` 
 ---
 
 ### PATCH `/projects/:projectId/add-user`
+
 **Permission:** Team Leader+
 
 Adds one or more users to the project's team. Uses `$addToSet` so duplicates are ignored.
 
 **Request Body:**
+
 ```json
 {
   "users": ["userId1", "userId2"]
@@ -700,6 +770,7 @@ Adds one or more users to the project's team. Uses `$addToSet` so duplicates are
 ```
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -710,11 +781,13 @@ Adds one or more users to the project's team. Uses `$addToSet` so duplicates are
 ---
 
 ### PATCH `/projects/:projectId/remove-user`
+
 **Permission:** Team Leader+
 
 Removes one or more users from the project's team.
 
 **Request Body:**
+
 ```json
 {
   "users": ["userId1", "userId2"]
@@ -722,6 +795,7 @@ Removes one or more users from the project's team.
 ```
 
 **Response `200`:**
+
 ```json
 {
   "status": "success",
@@ -742,31 +816,31 @@ All errors follow this format:
 }
 ```
 
-| Status Code | Meaning |
-|---|---|
-| `400` | Bad request — missing or invalid fields |
-| `402` | Payment Required (used for missing password fields) |
-| `403` | Forbidden — not authenticated or not authorized |
-| `404` | Not found — resource doesn't exist |
-| `500` | Internal server error |
+| Status Code | Meaning                                             |
+| ----------- | --------------------------------------------------- |
+| `400`       | Bad request — missing or invalid fields             |
+| `402`       | Payment Required (used for missing password fields) |
+| `403`       | Forbidden — not authenticated or not authorized     |
+| `404`       | Not found — resource doesn't exist                  |
+| `500`       | Internal server error                               |
 
 ---
 
 ## Quick Permissions Reference
 
-| Endpoint | Public | User | Data Entry | Team Leader | Admin |
-|---|:---:|:---:|:---:|:---:|:---:|
-| POST `/auth/login` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| POST `/auth/signup` | | | | | ✅ |
-| GET `/users/my-info` | | ✅ | ✅ | ✅ | ✅ |
-| GET `/users` | | | | ✅ | ✅ |
-| GET `/users/:userId` | | | | ✅ | ✅ |
-| DELETE `/users/:userId` | | | | | ✅ |
-| PATCH `/users/update-my-info` | | ✅ | ✅ | ✅ | ✅ |
-| PATCH `/users/update-user/:userId` | | ✅ | ✅ | ✅ | ✅ |
-| PATCH `/users/update-user-role/:userId` | | | | | ✅ |
-| PATCH `/users/change-my-password` | | ✅ | ✅ | ✅ | ✅ |
-| PATCH `/users/change-password/:userId` | | | | | ✅ |
+| Endpoint                                | Public | User | Data Entry | Team Leader | Admin |
+| --------------------------------------- | :----: | :--: | :--------: | :---------: | :---: |
+| POST `/auth/login`                      |   ✅   |  ✅  |     ✅     |     ✅      |  ✅   |
+| POST `/auth/signup`                     |        |      |            |             |  ✅   |
+| GET `/users/my-info`                    |        |  ✅  |     ✅     |     ✅      |  ✅   |
+| GET `/users`                            |        |      |            |     ✅      |  ✅   |
+| GET `/users/:userId`                    |        |      |            |     ✅      |  ✅   |
+| DELETE `/users/:userId`                 |        |      |            |             |  ✅   |
+| PATCH `/users/update-my-info`           |        |  ✅  |     ✅     |     ✅      |  ✅   |
+| PATCH `/users/update-user/:userId`      |        |  ✅  |     ✅     |     ✅      |  ✅   |
+| PATCH `/users/update-user-role/:userId` |        |      |            |             |  ✅   |
+| PATCH `/users/change-my-password`       |        |  ✅  |     ✅     |     ✅      |  ✅   |
+| PATCH `/users/change-password/:userId`  |        |      |            |             |  ✅   |
 
 | GET `/leads` | | ✅ | ✅ | ✅ | ✅ |
 | POST `/leads` | | ✅ | ✅ | ✅ | ✅ |

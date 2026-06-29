@@ -1,8 +1,428 @@
 {
-  "HomePage": {
-    "title": "Hello world!"
-  },
+  "HomePage": { "title": "Hello world!" },
   "LoginPage": {
-    "title": "Login"
+    "title": "Login",
+    "welcomeBack": "Welcome back",
+    "signInSubtitle": "Sign in to continue to your workspace",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember Me",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your Password",
+    "signingIn": "Signing in...",
+    "signIn": "Sign in to G-CRM"
+  },
+  "AdvSide": {
+    "trustedBadge": "Trusted by teams worldwide",
+    "headline1": "Run your business",
+    "headline2": "without limits.",
+    "tagline": "Manage everything in one place",
+    "activeUsers": "Active users",
+    "satisfaction": "Satisfaction",
+    "uptimeSla": "Uptime SLA",
+    "testimonial": "\"VeltroxCRM replaced three tools for us. Our team onboarded in a day and we closed 40% more deals in the first month.\"",
+    "testimonialAuthor": "Arjun M. - Operations Head",
+    "copyright": "© 2026 VeltroxCRM"
+  },
+  "DashboardPage": {
+    "trackLeads": "Track leads",
+    "projects": "Projects",
+    "viewAllProjects": "View All Projects",
+    "leads": "Leads"
+  },
+  "LeadsPage": {
+    "title": "Leads",
+    "subtitle": "View and manage all leads in the system",
+    "createLeads": "Create Leads",
+    "import": "Import",
+    "export": "Export"
+  },
+  "ErrorPage": {
+    "title": "Something went wrong",
+    "defaultMessage": "An unexpected error occurred. Please try again or go back.",
+    "goBack": "Go Back",
+    "tryAgain": "Try Again",
+    "contactSupport": "If this issue persists, please contact support."
+  },
+  "ProjectPage": {
+    "leads": "Leads",
+    "team": "Team",
+    "projectDescription": "Project Description",
+    "projectInformation": "Project Information",
+    "createdBy": "Created By",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "teamLeader": "Team Leader",
+    "noLeaderYet": "No Leader Yet",
+    "active": "Active"
+  },
+  "EmployeePage": {
+    "title": "User Details",
+    "edit": "Edit",
+    "delete": "Delete",
+    "teamMembers": "Team Members",
+    "deleteSuccessMsg": "You have deleted the user successfully",
+    "deleteFailMsg": "Something went wrong!",
+    "deleteTitle": "Delete User",
+    "deleteDescription": "This action cannot be undone. The User will be permanently removed."
+  },
+  "LeadColumns": {
+    "name": "Name",
+    "email": "Email",
+    "status": "Status",
+    "project": "Project",
+    "assignedTo": "Assigned To",
+    "actions": "Actions",
+    "noProject": "No Project",
+    "notAssignedYet": "Not assigned yet"
+  },
+  "LeadsChart": { "status": "Status" },
+  "LeadForm": {
+    "name": "Name",
+    "phone": "Phone",
+    "whatsApp": "WhatsApp",
+    "email": "Email",
+    "source": "Source",
+    "selectSource": "Select Source",
+    "save": "Save",
+    "sourceTikTok": "Tik Tok",
+    "sourceSnapchat": "Snapchat",
+    "sourceFacebook": "Facebook",
+    "sourceInstagram": "Instagram",
+    "sourceRecommended": "Recommended",
+    "sourceOther": "Other"
+  },
+  "LeadsToolbar": {
+    "leadsReady": "{count} leads ready",
+    "clearAll": "Clear All",
+    "saving": "Saving...",
+    "saveAllLeads": "Save All Leads"
+  },
+  "LeadDetails": {
+    "addedOn": "Added on",
+    "by": "By",
+    "project": "Project",
+    "source": "Source",
+    "assignedTo": "Assigned To"
+  },
+  "LeadStatus": {
+    "new": "New",
+    "contacted": "Contacted",
+    "qualified": "Qualified",
+    "closed": "Closed",
+    "lost": "Lost",
+    "problem": "Problem",
+    "solved": "Solved",
+    "successMessage": "Status has been updated successfully"
+  },
+  "EditLeadDialog": {
+    "editButton": "Edit",
+    "title": "Edit Lead",
+    "description": "Edit the basic information about this lead.",
+    "name": "Name",
+    "phone": "Phone",
+    "whatsApp": "WhatsApp",
+    "email": "Email",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "successMessage": "Lead has been updated successfully"
+  },
+  "NotesList": {
+    "title": "Notes",
+    "subtitle": "All notes and comments about this lead",
+    "emptyState": "Write Your First Note"
+  },
+  "AddNoteDialog": {
+    "addNoteButton": "Add Note",
+    "title": "Add Note",
+    "description": "Leave a note on this lead for your team.",
+    "noteLabel": "Note",
+    "placeholder": "Write your note here...",
+    "minChars": "Minimum 5 characters",
+    "saving": "Saving...",
+    "saveNote": "Save Note",
+    "successMsg": "Note has been added successfully",
+    "errorFallback": "Something went wrong!"
+  },
+  "NoteAction": {
+    "remove": "Remove",
+    "successMsg": "Note has been deleted successfully",
+    "errorFallback": "Something went wrong!"
+  },
+  "Note": {
+    "badge": "Note"
+  },
+  "UploadDialog": {
+    "importButton": "Import",
+    "title": "Import Leads",
+    "description": "Upload a spreadsheet to bulk-create leads"
+  },
+  "UploadStep": {
+    "dragDrop": "Drag & drop your Excel file",
+    "browseHint": "or click to browse .xlsx up to 10MB",
+    "fileName": "File Name:",
+    "fileSize": "File Size:",
+    "preview": "Preview"
+  },
+  "ValidationStep": {
+    "validRows": "Valid rows",
+    "rowsWithErrors": "Rows with errors",
+    "saving": "Saving...",
+    "importLeads": "Import {count} Leads"
+  },
+  "PreviewStep": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "source": "Source",
+    "continue": "Continue"
+  },
+  "FinalStep": {
+    "importComplete": "Import complete",
+    "leadSingular": "lead was",
+    "leadPlural": "leads were",
+    "importedSuffix": "successfully imported and added to your workspace.",
+    "rowSingular": "row was skipped.",
+    "rowPlural": "rows were skipped.",
+    "done": "Done",
+    "importFailed": "Import failed",
+    "close": "Close",
+    "tryAgain": "Try again"
+  },
+  "ProjectForm": {
+    "addProject": "+ Add Project",
+    "createTitle": "Create New Project",
+    "projectName": "Project Name",
+    "description": "Description",
+    "namePlaceholder": "e.g. Customer Management System",
+    "descriptionPlaceholder": "Briefly describe the project's purpose...",
+    "creating": "Creating...",
+    "createProject": "Create Project",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "createSuccess": "You have created the project successfully",
+    "updateSuccess": "Project has been updated successfully",
+    "errorFallback": "Something went wrong!"
+  },
+  "DetailsProjectCard": {
+    "editProject": "Edit Project",
+    "assignTeamLeader": "Assign Team Leader",
+    "deleteProject": "Delete Project",
+    "assignUsers": "Assign Users",
+    "totalLeads": "Total Leads",
+    "assignees": "Assignees",
+    "teamLeader": "Team Leader",
+    "status": "Status",
+    "created": "Created",
+    "assignTLSuccess": "You have assigned the TL to the project successfully",
+    "deleteSuccess": "You have deleted the project successfully",
+    "deleteFailMsg": "Something went wrong!",
+    "deleteTitle": "Delete Project",
+    "deleteDescription": "This action cannot be undone. The project will be permanently removed."
+  },
+  "AssignUsersToProject": {
+    "dialogTitle": "Assign Users to Project",
+    "dialogDescription": "Select one or more users to add to this project.",
+    "searchPlaceholder": "Search by name or email...",
+    "loadingUsers": "Loading users...",
+    "noUsersFound": "No users found",
+    "selectedSingular": "1 user selected",
+    "selectedPlural": "{count} users selected",
+    "assignUsers": "Assign Users",
+    "successMsg": "Users assigned to project successfully",
+    "errorMsg": "Something went wrong!"
+  },
+  "UserDetails": {
+    "assignedLeads": "Assigned Leads",
+    "activeProjects": "Active Projects",
+    "teamMembers": "Team Members",
+    "conversionRate": "Conversion Rate",
+    "salesTeam": "Sales Team",
+    "joined": "Joined",
+    "tagline": "Handles project coordination and lead follow-up"
+  },
+  "AssignedProjects": {
+    "title": "Assigned Projects",
+    "name": "Name",
+    "leads": "Leads",
+    "teamMembers": "Team Members",
+    "noProjects": "No Projects."
+  },
+  "EmployeePermissions": {
+    "title": "Permissions",
+    "description": "These permissions define what this user can access and manage in the system"
+  },
+  "ProjectsLayout": {
+    "projects": "Projects",
+    "searchPlaceholder": "Search projects...",
+    "noResults": "No Results.",
+    "notAssigned": "Not Assigned yet"
+  },
+  "ProjectCard": {
+    "created": "Created",
+    "allLeads": "All leads",
+    "assignees": "Assignees",
+    "teamLeader": "Team Leader"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Search any...",
+    "fields": "Fields",
+    "selected": "Selected",
+    "noResults": "No results.",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "AssignDialog": {
+    "assignTo": "Assign to {target}",
+    "selectA": "Select a {target}",
+    "aboutToAssign": "You are about to assign {count} leads to a {target}",
+    "assign": "Assign",
+    "successMsg": "You have assigned the leads successfully",
+    "targetUser": "user",
+    "targetProject": "project",
+    "targetTeamLeader": "team leader"
+  },
+  "DeleteDialog": {
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "Layout": {
+    "dashboard": "Dashboard"
+  },
+  "AppSidebar": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "employees": "Employees",
+    "leads": "Leads",
+    "signOut": "Sign Out"
+  },
+  "ProfileDropDown": {
+    "editProfile": "Edit Profile",
+    "signOut": "Sign Out"
+  },
+  "UsersColumns": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "role": "Role",
+    "actions": "Actions"
+  },
+  "EditUser": {
+    "title": "Edit User",
+    "subtitle": "Update user information and manage account settings",
+    "basicInfo": "Basic Information",
+    "changePassword": "Change Password",
+    "permissions": "Permissions"
+  },
+  "BasicInfoForm": {
+    "title": "Basic Information",
+    "subtitle": "Update the user's basic information and account details.",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "namePlaceholder": "e.g. Mona Khaled",
+    "emailPlaceholder": "e.g. mona@example.com",
+    "phonePlaceholder": "+201012345678",
+    "infoNote": "Updating basic information will not change the user's password.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "successToast": "User updated successfully",
+    "errorFallback": "Something went wrong!"
+  },
+  "ChangePasswordForm": {
+    "title": "Change Password",
+    "adminSubtitle": "Set a new password for this user directly.",
+    "userSubtitle": "Update your password by verifying your current one first.",
+    "adminNote": "As an admin, you can set a new password directly without providing the current one.",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "confirmNewPassword": "Confirm New Password",
+    "currentPassword": "Current Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "reEnterPlaceholder": "Re-enter new password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "successToast": "Password updated successfully",
+    "errorFallback": "Something went wrong!"
+  },
+  "ChangePermissions": {
+    "title": "Permissions",
+    "subtitle": "Select a role to apply the default permissions for that role. You can review the permissions below.",
+    "roleLabel": "Role",
+    "permissionsPreview": "Permissions Preview",
+    "infoNote": "Changing the role will update the user's permissions based on the selected role.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "successToast": "User role updated successfully",
+    "errorFallback": "Something went wrong!",
+    "adminLabel": "Admin",
+    "adminDesc": "Full access to all system features",
+    "teamLeaderLabel": "Team Leader",
+    "teamLeaderDesc": "Manage leads, projects and team members",
+    "dataEntryLabel": "Data Entry",
+    "dataEntryDesc": "Create and manage lead information",
+    "userLabel": "User",
+    "userDesc": "View leads and project information"
+  },
+  "UserDropDown": {
+    "remove": "Remove",
+    "removeSuccessMsg": "You have removed the user successfully",
+    "removeFailMsg": "Something went wrong!",
+    "removeTitle": "Remove user from project",
+    "removeDescription": "This action cannot be undone. The user will be permanently removed."
+  },
+  "LeadDropDown": {
+    "deleteSuccessMsg": "You have deleted the lead successfully",
+    "deleteFailMsg": "Something went wrong!",
+    "deleteTitle": "Delete leads",
+    "deleteDescription": "This action cannot be undone. The selected leads will be permanently removed."
+  },
+  "ErrorBox": {
+    "fallback": "Something went wrong!"
+  },
+  "UserForm": {
+    "newEmployee": "+ New Employee",
+    "createTitle": "Create New User",
+    "fullName": "Full Name",
+    "namePlaceholder": "e.g. Mona Khaled",
+    "emailAddress": "Email Address",
+    "emailPlaceholder": "e.g. mona@example.com",
+    "phoneNumber": "Phone Number",
+    "phonePlaceholder": "+201012345678",
+    "role": "Role",
+    "selectRole": "Select role",
+    "security": "Security",
+    "password": "Password",
+    "passwordPlaceholder": "Min 8 chars, uppercase, number, special",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter the password",
+    "creating": "Creating...",
+    "createUser": "Create User",
+    "successMsg": "User has been added successfully",
+    "errorFallback": "Something went wrong!",
+    "roleUser": "User",
+    "roleDataEntry": "Data Entry",
+    "roleTeamLeader": "Team Leader",
+    "roleAdmin": "Admin"
+  },
+  "Validation": {
+    "nameRequired": "Name is required",
+    "nameMin": "Name must be at least 2 characters",
+    "nameMax": "Name must be under 100 characters",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please provide a valid email",
+    "phoneRequired": "Phone number is required",
+    "phoneInvalid": "Please provide a valid phone number",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordUppercase": "Must contain at least 1 uppercase letter",
+    "passwordLowercase": "Must contain at least 1 lowercase letter",
+    "passwordNumber": "Must contain at least 1 number",
+    "passwordSpecial": "Must contain at least 1 special character",
+    "confirmPasswordRequired": "Please confirm the password",
+    "confirmNewPasswordRequired": "Please confirm the new password",
+    "currentPasswordRequired": "Current password is required",
+    "passwordsMustMatch": "Passwords do not match"
   }
 }

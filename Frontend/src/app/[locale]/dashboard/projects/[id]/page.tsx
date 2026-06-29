@@ -8,23 +8,22 @@ import LeadsTable from "../../_components/leads-table";
 import UserTable from "@/app/[locale]/dashboard/_components/user-table";
 import { Info, User, FileText } from "lucide-react";
 import { User as TypeUser } from "@/shared/lib/types/app-data.t";
+import { getTranslations } from "next-intl/server";
+
 export default async function page({ params }: { params: { id: string } }) {
   const param = await params;
-  // Token
+  const t = await getTranslations("ProjectPage");
   const token = await getMyToken();
 
-  // Fetch Projects
   const { error: projectError, data: projectData } = await getProject(
     `${token}`,
     param.id,
   );
 
-  // Statments
   if (projectError) {
     return <ErrorBox error={`${projectError}`} />;
   }
 
-  // Variables
   const project = projectData.data.project;
   const projectCreator =
     project?.createdBy?.name.split(" ").length > 2
@@ -32,46 +31,43 @@ export default async function page({ params }: { params: { id: string } }) {
       : project?.createdBy?.name || "-";
 
   const leaderNameArray = project?.leader?.name.split(" ");
-
   const leaderName =
     project?.leader?.name && leaderNameArray[0][0] + leaderNameArray[1][0];
 
   const teamIds = project.team.map((user: TypeUser) => user._id);
+
   return (
     <div>
-      {/* Upper Card */}
       <DetailsProjectCard
         name={project.name}
         description={project.description}
         createdAt={formatDate(project.createdAt)}
-        status="Active"
+        status={t("active")}
         totalLeads={project.leads.length}
         assignees={project.team.length}
-        teamLeader={project?.leader?.name || "No Leader Yet"}
+        teamLeader={project?.leader?.name || t("noLeaderYet")}
         id={project._id}
         teamIds={teamIds}
       />
 
-      {/* Tabs */}
       <Tabs defaultValue="leads" className="mt-4 flex-1">
         <TabsList variant="line">
-          <TabsTrigger value="leads">Leads</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
+          <TabsTrigger value="leads">{t("leads")}</TabsTrigger>
+          <TabsTrigger value="team">{t("team")}</TabsTrigger>
         </TabsList>
 
         <div className="grid grid-cols-4 gap-4">
-          {/* Tabs Content */}
           <div className="col-span-3 max-md:col-span-4">
             <TabsContent value="leads">
               <LeadsTable leads={project.leads} env="project" />
             </TabsContent>
             <TabsContent value="team">
-              <UserTable users={project.team} />
+              <UserTable users={project.team} env="project" />
             </TabsContent>
             <div className=" wrap-break-word mt-4 col-span-1 rounded-md p-4 border">
               <div className="flex items-center gap-3 mb-6">
                 <FileText className="text-primary-200" />
-                <h2 className="font-semibold">Project Description</h2>
+                <h2 className="font-semibold">{t("projectDescription")}</h2>
               </div>
               <p className="w-2/3 max-md:  wrap-break-word">
                 {project.description}
@@ -79,23 +75,22 @@ export default async function page({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          {/* Right side => Information */}
           <div className=" col-span-1 max-md:col-span-4">
             <div className=" wrap-break-word mt-4  rounded-md p-4 border">
               <div className="font-semibold flex gap-3 mb-5">
                 <Info size={24} className="text-primary-500" />
-                Project Information
+                {t("projectInformation")}
               </div>
               <div className="font-semibold flex items-center justify-between gap-3 mb-4">
-                <span>Created By</span>
+                <span>{t("createdBy")}</span>
                 <span>{projectCreator}</span>
               </div>
               <div className="font-semibold flex items-center justify-between gap-3 mb-4">
-                <span>Created At</span>
+                <span>{t("createdAt")}</span>
                 <span>{formatDate(project.createdAt)}</span>
               </div>
               <div className="font-semibold flex items-center justify-between gap-3">
-                <span>Updated At</span>
+                <span>{t("updatedAt")}</span>
                 <span>{formatDate(project.updatedAt)}</span>
               </div>
             </div>
@@ -105,7 +100,7 @@ export default async function page({ params }: { params: { id: string } }) {
                   <span className="p-1 rounded-md bg-purple-300">
                     <User size={24} className="text-purple-400" />
                   </span>
-                  Team Leader
+                  {t("teamLeader")}
                 </div>
                 <div className="font-semibold flex items-center gap-3 mb-5">
                   <span className="p-2 rounded-full bg-violet-400 text-violet-600">

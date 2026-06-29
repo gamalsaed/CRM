@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-module.exports = {
+const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
@@ -13,8 +13,5 @@ module.exports = {
   },
 };
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
 const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);

@@ -2,6 +2,10 @@ import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { ApiResponse, LoginResponse } from "./shared/lib/types/api-types";
 
+/**
+ * NextAuth configuration. Uses the credentials provider to authenticate
+ * against the backend API and stores the JWT token in the session.
+ */
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
@@ -17,6 +21,10 @@ export const authOptions: NextAuthOptions = {
         password: {},
       },
 
+      /**
+       * Validates credentials against the backend API.
+       * Throws an error if the response status is not "success".
+       */
       authorize: async (credentials) => {
         const response = await fetch(`${process.env.BASE_API}/auth/login`, {
           method: "POST",
@@ -44,6 +52,7 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
+    /** Persists the backend API token and user profile into the JWT. */
     jwt: ({ token, user, trigger, session }) => {
       if (user) {
         token.user = user.user;
@@ -53,6 +62,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
+    /** Exposes the user profile from the JWT on the session object. */
     session: ({ session, token }) => {
       return {
         ...session,

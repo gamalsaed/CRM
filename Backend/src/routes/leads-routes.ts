@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getAllLeads,
-  createLead,
+  createLeads,
   updateLead,
   getLead,
   deleteLead,
@@ -34,5 +34,5 @@ lead_router
   .patch(updateLead)
   .delete(restrictTo("admin"), deleteLead);
 
-lead_router.route("/").get(getAllLeads).post(createLead);
+lead_router.route("/").get(getAllLeads).post(createLeads);
 export default lead_router;

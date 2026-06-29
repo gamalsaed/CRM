@@ -31,8 +31,6 @@ export const createProject = asyncCatch(
       createdBy: req.user._id,
     });
 
-    console.log(req);
-
     res.status(201).json({
       status: "success",
       data: {

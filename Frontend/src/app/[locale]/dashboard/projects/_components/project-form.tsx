@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { handleProjectFormAction } from "@/shared/lib/actions/projects.action";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +43,7 @@ export default function ProjectForm({
   method,
   id,
 }: NewProjectFormProps) {
+  const t = useTranslations("ProjectForm");
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -50,18 +52,14 @@ export default function ProjectForm({
     mutationFn: handleProjectFormAction,
     onSuccess: () => {
       toast.success(
-        method === "POST"
-          ? "You have created the project successfully"
-          : "Project has been updated successfully",
-        {
-          position: "bottom-right",
-        },
+        method === "POST" ? t("createSuccess") : t("updateSuccess"),
+        { position: "bottom-right" },
       );
       setOpen(false);
       router.refresh();
     },
     onError: (err) => {
-      toast.error(err.message || "Something went wrong!", {
+      toast.error(err.message || t("errorFallback"), {
         position: "bottom-right",
       });
     },
@@ -84,7 +82,6 @@ export default function ProjectForm({
   const descriptionValue = watch("description") ?? "";
 
   const handleFormSubmit = async (values: NewProjectFormValues) => {
-    console.log(values);
     if (method === "PATCH") {
       mutate({ ...values, method, id });
     } else {
@@ -100,13 +97,13 @@ export default function ProjectForm({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {children ? children : <Button className="w-fit">+ Add Project</Button>}
+        {children ? children : <Button className="w-fit">{t("addProject")}</Button>}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[480px] rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
-            Create New Project
+            {t("createTitle")}
           </DialogTitle>
         </DialogHeader>
 
@@ -114,14 +111,13 @@ export default function ProjectForm({
           onSubmit={handleSubmit(handleFormSubmit)}
           className="space-y-5 pt-2"
         >
-          {/* Project Name */}
           <div className="space-y-2">
             <Label htmlFor="name">
-              Project Name <span className="text-destructive">*</span>
+              {t("projectName")} <span className="text-destructive">*</span>
             </Label>
             <Input
               id="name"
-              placeholder="e.g. Customer Management System"
+              placeholder={t("namePlaceholder")}
               className={cn(errors.name && "border-destructive ")}
               {...register("name")}
             />
@@ -130,14 +126,13 @@ export default function ProjectForm({
             )}
           </div>
 
-          {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description">
-              Description <span className="text-destructive">*</span>
+              {t("description")} <span className="text-destructive">*</span>
             </Label>
             <Textarea
               id="description"
-              placeholder="Briefly describe the project's purpose..."
+              placeholder={t("descriptionPlaceholder")}
               className={cn(
                 "resize-none min-h-[100px]",
                 errors.description && "border-destructive ",
@@ -161,7 +156,7 @@ export default function ProjectForm({
           {error && <ErrorBox className="w-full" error={error?.message} />}
           <DialogFooter className="pt-2 flex flex-col">
             <Button type="submit" disabled={isPending || !isDirty}>
-              {isPending ? "Creating..." : "Create Project"}
+              {isPending ? t("creating") : t("createProject")}
             </Button>
           </DialogFooter>
         </form>

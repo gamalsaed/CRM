@@ -12,7 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Next.js
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Next.js
   }),
 );
 

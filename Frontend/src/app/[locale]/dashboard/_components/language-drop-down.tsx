@@ -14,12 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, Check } from "lucide-react";
 
+/** Dropdown that switches the active locale between English (en) and Arabic (ar). */
 export default function LanguageDropDown() {
-  // Hooks
+  // State
   const [isOpen, onOpen] = useState(false);
+
+  // Navigation
   const pathname = usePathname();
 
-  // Vaariables
+  // Variables
   const local = pathname.split("/")[1];
   const country = local === "en" ? "US" : local === "ar" && "EG";
   const currentPath = `/${pathname.split("/").slice(2).join("/")}`;

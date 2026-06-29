@@ -3,7 +3,13 @@ import { useMutation } from "@tanstack/react-query";
 import type { LoginCredintials } from "@/shared/lib/types/auth";
 import { useRouter } from "@/i18n/navigation";
 
+/**
+ * Custom hook that wraps the NextAuth credentials sign-in flow.
+ * Navigates to /dashboard and reloads the page on success so the session
+ * cookie is picked up by the middleware without a stale cache.
+ */
 export function useLogin() {
+  // Navigation
   const router = useRouter();
 
   // Mutation

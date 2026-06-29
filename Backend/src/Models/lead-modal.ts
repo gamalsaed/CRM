@@ -20,9 +20,6 @@ const leadSchema = new mongoose.Schema<LeadSchema>({
     type: String,
     validate: [validator.isEmail, "Please provide a valid email"],
   },
-  address: {
-    type: String,
-  },
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
@@ -40,7 +37,10 @@ const leadSchema = new mongoose.Schema<LeadSchema>({
     ],
     default: "new",
   },
-
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   createdAt: {
     type: Date,
     default: Date.now,

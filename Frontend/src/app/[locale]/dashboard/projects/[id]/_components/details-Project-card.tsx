@@ -1,22 +1,19 @@
 "use client";
 
-// Hooks
 import { useRouter } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
-// Actions & utilis
 import { getUsersAction } from "@/shared/lib/actions/user.action";
 import { deleteProjectAction } from "@/shared/lib/actions/projects.action";
 import { restrictTo } from "@/shared/lib/utils/restrictTo";
 
-// Components
 import { Separator } from "@/components/ui/separator";
 import { AssignDialog } from "@/shared/components/assign-dialog";
 import DeleteDialog from "@/shared/components/delete-dialog";
 import ProjectForm from "../../_components/project-form";
 
-// Icons
 import {
   Pencil,
   UserCog,
@@ -28,13 +25,12 @@ import {
 } from "lucide-react";
 import AssignUsersToProject from "./assign-user-to-project";
 
-// Types
 type ProjectCardProps = {
   logo?: string;
   name: string;
   description?: string;
   createdAt: string;
-  status: "Active" | "Inactive";
+  status: string;
   totalLeads: number;
   assignees: number;
   teamLeader: string;
@@ -49,18 +45,10 @@ type StatItemProps = {
   value: string | number;
   bold?: boolean;
   badge?: boolean;
-  status?: "Active" | "Inactive";
+  status?: string;
 };
 
-function StatItem({
-  icon,
-  bg,
-  label,
-  value,
-  bold,
-  badge,
-  status,
-}: StatItemProps) {
+function StatItem({ icon, bg, label, value, bold, badge, status }: StatItemProps) {
   return (
     <div className="flex items-center gap-3">
       <div
@@ -73,7 +61,7 @@ function StatItem({
         {badge ? (
           <span
             className={`text-xs font-medium px-2 py-0.5 rounded-full w-fit mt-0.5 ${
-              status === "Active"
+              status === "Active" || status === "نشط"
                 ? "bg-green-50 text-green-600"
                 : "bg-gray-100 text-gray-500"
             }`}
@@ -104,14 +92,11 @@ export function DetailsProjectCard({
   id,
   teamIds,
 }: ProjectCardProps) {
-  // Session
+  const t = useTranslations("DetailsProjectCard");
   const { data } = useSession();
-
-  // Router
   const router = useRouter();
 
-  // Query
-  const { data: users, error: usersError } = useQuery({
+  const { data: users } = useQuery({
     queryKey: ["Users-team-leader"],
     queryFn: async () => {
       const result = await getUsersAction("role=team leader");
@@ -123,32 +108,24 @@ export function DetailsProjectCard({
   function backStep() {
     router.back();
   }
-  console.log(assignees);
+
   return (
     <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm space-y-4">
-      {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
-        {/* Left: logo + info */}
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
             {logo ? (
-              <img
-                src={logo}
-                alt={name}
-                className="w-full h-full object-cover"
-              />
+              <img src={logo} alt={name} className="w-full h-full object-cover" />
             ) : (
               <span className="text-xl font-bold text-gray-400">{name[0]}</span>
             )}
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <span className="text-base font-semibold text-gray-900">
-                {name}
-              </span>
+              <span className="text-base font-semibold text-gray-900">{name}</span>
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                  status === "Active"
+                  status === "Active" || status === "نشط"
                     ? "bg-green-50 text-green-600"
                     : "bg-gray-100 text-gray-500"
                 }`}
@@ -176,23 +153,17 @@ export function DetailsProjectCard({
                 <line x1="8" x2="8" y1="2" y2="6" />
                 <line x1="3" x2="21" y1="10" y2="10" />
               </svg>
-              Created {createdAt}
+              {t("created")} {createdAt}
             </div>
           </div>
         </div>
 
-        {/* Right: actions */}
         {restrictTo(data?.user?.role!, "admin") && (
           <div className="flex items-center gap-2 flex-wrap">
-            <ProjectForm
-              name={name}
-              description={description}
-              method="PATCH"
-              id={id}
-            >
+            <ProjectForm name={name} description={description} method="PATCH" id={id}>
               <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-200 text-blue-600 text-xs font-medium hover:bg-blue-50 transition-colors">
                 <Pencil size={13} />
-                Edit Project
+                {t("editProject")}
               </button>
             </ProjectForm>
             {users?.data && (
@@ -200,61 +171,59 @@ export function DetailsProjectCard({
                 data={users.data.query}
                 ids={id}
                 target="team leader"
-                successMsg="You have assigned the TL to the project successfully"
+                successMsg={t("assignTLSuccess")}
               >
                 <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-medium hover:bg-gray-50 transition-colors">
                   <UserCog size={13} />
-                  Assign Team Leader
+                  {t("assignTeamLeader")}
                 </button>
               </AssignDialog>
             )}
             <DeleteDialog
-              id={id}
+              args={[id]}
               afterSuccess={backStep}
               deleteFn={deleteProjectAction}
-              successMsg="You have deleted the project successfully"
-              failMsg="Something went wrong!"
-              title="Delete Project"
-              description="This action cannot be undone. The project will be permanently removed."
+              successMsg={t("deleteSuccess")}
+              failMsg={t("deleteFailMsg")}
+              title={t("deleteTitle")}
+              description={t("deleteDescription")}
             >
               <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-200 text-red-600 text-xs font-medium hover:bg-red-50 transition-colors">
                 <Trash2 size={13} />
-                Delete Project
+                {t("deleteProject")}
               </button>
             </DeleteDialog>
             <AssignUsersToProject projectId={id} currentTeamIds={teamIds}>
               <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-medium hover:bg-gray-50 transition-colors">
                 <UserCog size={13} />
-                Assign Users
+                {t("assignUsers")}
               </button>
             </AssignUsersToProject>
           </div>
         )}
       </div>
 
-      {/* Separator */}
       <div className="border-t border-gray-100" />
 
-      {/* Stats */}
       <div className="grid max-md:grid-cols-2 sm:grid-cols-7 gap-3">
         <StatItem
           icon={<BookMarked size={16} className="text-blue-500" />}
           bg="bg-blue-50"
-          label="Total Leads"
+          label={t("totalLeads")}
           value={totalLeads}
         />
         <Separator orientation="vertical" className="max-md:hidden" />
         <StatItem
           icon={<LayoutList size={16} className="text-green-500" />}
           bg="bg-green-50"
-          label="Assignees"
+          label={t("assignees")}
           value={assignees}
         />
         <Separator orientation="vertical" className="max-md:hidden" />
         <StatItem
           icon={<Users size={16} className="text-purple-500" />}
           bg="bg-purple-50"
-          label="Team Leader"
+          label={t("teamLeader")}
           value={teamLeader}
           bold
         />
@@ -262,7 +231,7 @@ export function DetailsProjectCard({
         <StatItem
           icon={<ShieldCheck size={16} className="text-orange-500" />}
           bg="bg-orange-50"
-          label="Status"
+          label={t("status")}
           value={status}
           badge
           status={status}

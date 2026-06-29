@@ -1,11 +1,8 @@
 "use client";
 
-// Hooks
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-
-// Shadcn
 import { cn } from "../lib/utils/utils";
 import { toast } from "sonner";
 import {
@@ -18,16 +15,11 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-
-// Icons
 import { CircleUserRound, FolderOpenDot } from "lucide-react";
-
-// Types
 import { type User, ProjectType } from "../lib/types/app-data.t";
-
-// Actions
 import { assignLeadsAction } from "../lib/actions/leads.action";
 import { assignTeamLeaderAction } from "../lib/services/projects.s";
+import { useTranslations } from "next-intl";
 
 type dialogProps = {
   data: User[] | ProjectType[];
@@ -44,17 +36,22 @@ export function AssignDialog({
   children,
   successMsg,
 }: dialogProps) {
-  // States
+  const t = useTranslations("AssignDialog");
   const [selected, setSelected] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
 
-  // Effect
+  const targetLabels: Record<string, string> = {
+    user: t("targetUser"),
+    project: t("targetProject"),
+    "team leader": t("targetTeamLeader"),
+  };
+  const targetLabel = targetLabels[target] ?? target;
+
   useEffect(() => {
     setSelected("");
   }, [isOpen]);
 
-  // Mutation
   const { isPending, mutate } = useMutation({
     mutationKey: [`assign-leads-to-${target}`],
     mutationFn: () =>
@@ -63,7 +60,7 @@ export function AssignDialog({
         : assignLeadsAction(selected!, ids as string[], target),
     onSuccess: () => {
       setIsOpen(false);
-      toast.success(successMsg || "You have assigned the leads successfully", {
+      toast.success(successMsg || t("successMsg"), {
         position: "bottom-right",
       });
       router.refresh();
@@ -87,17 +84,16 @@ export function AssignDialog({
             ) : (
               <FolderOpenDot width={16} height={16} />
             )}
-
-            <p className=" capitalize">Assign to {target}</p>
+            <p className=" capitalize">{t("assignTo", { target: targetLabel })}</p>
           </div>
         )}
       </DialogTrigger>
       <DialogContent className="rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="capitalize">Select a {target}</DialogTitle>
+          <DialogTitle className="capitalize">{t("selectA", { target: targetLabel })}</DialogTitle>
           {target !== "team leader" && (
             <DialogDescription>
-              Your are about to assign {`(${ids.length})`} leads to a {target}
+              {t("aboutToAssign", { count: (ids as string[]).length, target: targetLabel })}
             </DialogDescription>
           )}
         </DialogHeader>
@@ -137,7 +133,7 @@ export function AssignDialog({
           disabled={!selected || isPending ? true : false}
           onClick={() => mutate()}
         >
-          Assign
+          {t("assign")}
         </Button>
       </DialogContent>
     </Dialog>

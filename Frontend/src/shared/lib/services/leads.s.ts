@@ -1,5 +1,9 @@
 import { catchAsync } from "../utils/catchAsync";
 
+/**
+ * Fetches aggregated lead counts grouped by status.
+ * Used to populate the status tracker cards and bar chart on the home page.
+ */
 export async function getLeadsStatus(token: string) {
   return catchAsync(async () => {
     const statusApi = await fetch(
@@ -19,6 +23,7 @@ export async function getLeadsStatus(token: string) {
   });
 }
 
+/** Fetches all leads accessible to the current user. */
 export async function getLeads(token: string) {
   return catchAsync(async () => {
     const statusApi = await fetch(`${process.env.BASE_API}/leads`, {

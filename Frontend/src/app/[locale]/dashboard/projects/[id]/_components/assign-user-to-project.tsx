@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import {
   Dialog,
@@ -59,6 +60,7 @@ export default function AssignUsersToProject({
   currentTeamIds,
   children,
 }: Props) {
+  const t = useTranslations("AssignUsersToProject");
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
@@ -78,7 +80,6 @@ export default function AssignUsersToProject({
   });
 
   const users: User[] = data?.data?.query ?? [];
-  console.log(data);
   const filtered = useMemo(
     () =>
       users.filter(
@@ -94,13 +95,11 @@ export default function AssignUsersToProject({
     mutationFn: () => addUsersToProjectAction(projectId, Array.from(selected)),
     onSuccess: () => {
       setOpen(false);
-      toast.success("Users assigned to project successfully", {
-        position: "bottom-right",
-      });
+      toast.success(t("successMsg"), { position: "bottom-right" });
       router.refresh();
     },
     onError: () => {
-      toast.error("Something went wrong!", { position: "bottom-right" });
+      toast.error(t("errorMsg"), { position: "bottom-right" });
     },
   });
 
@@ -116,24 +115,22 @@ export default function AssignUsersToProject({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {children ?? <Button>Assign Users</Button>}
+        {children ?? <Button>{t("assignUsers")}</Button>}
       </DialogTrigger>
 
       <DialogContent className="max-w-lg rounded-2xl p-0 overflow-hidden gap-0">
         <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle className="text-lg font-semibold">
-            Assign Users to Project
+            {t("dialogTitle")}
           </DialogTitle>
-          <DialogDescription>
-            Select one or more users to add to this project.
-          </DialogDescription>
+          <DialogDescription>{t("dialogDescription")}</DialogDescription>
         </DialogHeader>
 
         <div className="px-6 pb-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
             <Input
-              placeholder="Search by name or email..."
+              placeholder={t("searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9"
@@ -144,11 +141,11 @@ export default function AssignUsersToProject({
         <div className="max-h-90 overflow-y-auto no-scrollbar px-4 pb-3">
           {isLoading ? (
             <div className="py-10 text-center text-sm text-gray-400">
-              Loading users...
+              {t("loadingUsers")}
             </div>
           ) : filtered.length === 0 ? (
             <div className="py-10 text-center text-sm text-gray-400">
-              No users found
+              {t("noUsersFound")}
             </div>
           ) : (
             filtered.map((user, i) => {
@@ -200,14 +197,16 @@ export default function AssignUsersToProject({
 
         <div className="flex items-center justify-between px-6 py-4 border-t">
           <p className="text-sm text-gray-500">
-            {selected.size} {selected.size === 1 ? "user" : "users"} selected
+            {selected.size === 1
+              ? t("selectedSingular")
+              : t("selectedPlural", { count: selected.size })}
           </p>
           <div className="flex gap-2">
             <Button
               onClick={() => mutate()}
               disabled={isPending || selected.size === 0}
             >
-              Assign Users
+              {t("assignUsers")}
             </Button>
           </div>
         </div>

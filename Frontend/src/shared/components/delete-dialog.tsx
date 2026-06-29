@@ -2,7 +2,6 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,14 +12,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
-// Types
 type DeleteProps = {
-  id: string;
-  deleteFn: (id: string) => Promise<any>;
+  args: string[];
+  deleteFn: (...args: string[]) => Promise<any>;
   successMsg: string;
   failMsg: string;
   title: string;
@@ -30,7 +28,6 @@ type DeleteProps = {
 };
 
 export default function DeleteDialog({
-  id,
   deleteFn,
   successMsg,
   failMsg,
@@ -38,25 +35,21 @@ export default function DeleteDialog({
   description,
   children,
   afterSuccess,
+  args,
 }: DeleteProps) {
-  // Router
+  const t = useTranslations("DeleteDialog");
   const router = useRouter();
 
-  // Mutations
   const { mutate } = useMutation({
-    mutationKey: [`delete-${id}`],
-    mutationFn: () => deleteFn(id),
+    mutationKey: [`delete-${args}`],
+    mutationFn: () => deleteFn(...args),
     onSuccess: () => {
-      toast.success(successMsg, {
-        position: "bottom-right",
-      });
+      toast.success(successMsg, { position: "bottom-right" });
       afterSuccess?.();
       router.refresh();
     },
     onError: () => {
-      toast.error(failMsg, {
-        position: "bottom-right",
-      });
+      toast.error(failMsg, { position: "bottom-right" });
     },
   });
 
@@ -68,7 +61,7 @@ export default function DeleteDialog({
         ) : (
           <div className="cursor-pointer p-2 text-[12px] text-red-600 hover:bg-red-50 flex items-center gap-3">
             <Trash2 width={16} height={16} />
-            <p>Delete</p>
+            <p>{t("delete")}</p>
           </div>
         )}
       </AlertDialogTrigger>
@@ -82,14 +75,14 @@ export default function DeleteDialog({
         </div>
         <AlertDialogFooter className="flex w-full ">
           <AlertDialogCancel className="flex-1 rounded-md">
-            Cancel
+            {t("cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             variant="danger"
             className="flex-1 rounded-md"
             onClick={() => mutate()}
           >
-            <Trash2 size={14} /> Delete
+            <Trash2 size={14} /> {t("delete")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

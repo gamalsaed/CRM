@@ -1,5 +1,9 @@
 import { Label } from "@/components/ui/label";
 
+/**
+ * Reusable form field wrapper. Renders a label, the field control (children),
+ * an optional required asterisk and an inline validation error message.
+ */
 export default function Field({
   label,
   required,

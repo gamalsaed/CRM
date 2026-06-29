@@ -1,5 +1,5 @@
 import getMyToken from "@/shared/lib/utils/getToken";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import CountCard from "@/shared/components/leads-status-card";
 import { ErrorBox } from "@/shared/components/error_box";
 import { getLeadsStatus, getLeads } from "@/shared/lib/services/leads.s";
@@ -7,8 +7,11 @@ import { getProjects } from "@/shared/lib/services/projects.s";
 import LeadsTable from "./_components/leads-table";
 import Projects from "@/shared/layouts/projects";
 import { LeadsChartBar } from "./_components/bar-chart";
+import { getTranslations } from "next-intl/server";
 
 export default async function page() {
+  const t = await getTranslations("DashboardPage");
+
   // Token
   const token = await getMyToken();
 
@@ -27,7 +30,9 @@ export default async function page() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-primary-500 mb-4">Track leads</h1>
+      <h1 className="text-3xl font-bold text-primary-500 mb-4">
+        {t("trackLeads")}
+      </h1>
       {leadsStatusError && <ErrorBox error={`${leadsStatusError}`} />}
       {/* LEADS TRACKER */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -54,12 +59,14 @@ export default async function page() {
       {leadsStatusData && <LeadsChartBar data={leadsStatusData.stats} />}
       {projectsData?.data?.projects.length > 0 && (
         <div className="flex items-center justify-between mb-4 mt-8">
-          <h1 className="text-3xl font-bold text-primary-500 ">Projects</h1>
+          <h1 className="text-3xl font-bold text-primary-500 ">
+            {t("projects")}
+          </h1>
           <Link
             href="/dashboard/projects"
             className="text-sm text-gray-400 cursor-pointer"
           >
-            View All Projects
+            {t("viewAllProjects")}
           </Link>
         </div>
       )}

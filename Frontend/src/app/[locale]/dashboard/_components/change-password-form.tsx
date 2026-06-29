@@ -11,28 +11,36 @@ import { cn } from "@/shared/lib/utils/utils";
 import Field from "@/shared/components/field";
 import PasswordInput from "@/shared/components/password-input";
 import {
-  adminChangePasswordSchema,
+  makeAdminChangePasswordSchema,
   AdminChangePasswordValues,
-  userChangePasswordSchema,
+  makeUserChangePasswordSchema,
   UserChangePasswordValues,
 } from "@/shared/lib/schemas/users.s";
 import { useSession } from "next-auth/react";
 import { changePasswordAction } from "@/shared/lib/actions/user.action";
+import { useTranslations } from "next-intl";
 
 type ChangePasswordFormProps = {
   userId: string;
 };
 
-// ─── Admin form (password + confirm only) ────────────────────────────────────
+// ─── Admin form ───────────────────────────────────────────────────────────────
 
+/**
+ * Password form for admins. Lets an admin set a new password directly
+ * without needing to know the user's current password.
+ */
 function AdminPasswordForm({ userId }: { userId: string }) {
+  const t = useTranslations("ChangePasswordForm");
+  const tv = useTranslations("Validation");
+
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<AdminChangePasswordValues>({
-    resolver: zodResolver(adminChangePasswordSchema),
+    resolver: zodResolver(makeAdminChangePasswordSchema(tv)),
   });
 
   const { mutate, isPending } = useMutation({
@@ -40,13 +48,13 @@ function AdminPasswordForm({ userId }: { userId: string }) {
       await changePasswordAction(_data, userId);
     },
     onSuccess: () => {
-      toast.success("Password updated successfully", {
+      toast.success(t("successToast"), {
         position: "bottom-right",
       });
       reset();
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Something went wrong!", {
+      toast.error(err.message || t("errorFallback"), {
         position: "bottom-right",
       });
     },
@@ -56,27 +64,24 @@ function AdminPasswordForm({ userId }: { userId: string }) {
     <form onSubmit={handleSubmit((v) => mutate(v))} className="space-y-5">
       <div className="flex items-start gap-3 rounded-lg bg-amber-50 border border-amber-100 px-4 py-3">
         <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-        <p className="text-sm text-amber-700">
-          As an admin, you can set a new password directly without providing the
-          current one.
-        </p>
+        <p className="text-sm text-amber-700">{t("adminNote")}</p>
       </div>
 
-      <Field label="New Password" required error={errors.newPassword?.message}>
+      <Field label={t("newPassword")} required error={errors.newPassword?.message}>
         <PasswordInput
-          placeholder="Enter new password"
+          placeholder={t("newPasswordPlaceholder")}
           error={!!errors.newPassword}
           {...register("newPassword")}
         />
       </Field>
 
       <Field
-        label="Confirm Password"
+        label={t("confirmPassword")}
         required
         error={errors.confirmPassword?.message}
       >
         <PasswordInput
-          placeholder="Re-enter new password"
+          placeholder={t("reEnterPlaceholder")}
           error={!!errors.confirmPassword}
           {...register("confirmPassword")}
         />
@@ -89,23 +94,30 @@ function AdminPasswordForm({ userId }: { userId: string }) {
           className="rounded-lg gap-2"
         >
           <Save className="w-4 h-4" />
-          {isPending ? "Saving..." : "Save Changes"}
+          {isPending ? t("saving") : t("saveChanges")}
         </Button>
       </div>
     </form>
   );
 }
 
-// ─── User/non-admin form (current + new + confirm) ───────────────────────────
+// ─── User form ────────────────────────────────────────────────────────────────
 
+/**
+ * Password form for regular users. Requires the current password before
+ * allowing a new one to be set.
+ */
 function UserPasswordForm({ userId }: { userId: string }) {
+  const t = useTranslations("ChangePasswordForm");
+  const tv = useTranslations("Validation");
+
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<UserChangePasswordValues>({
-    resolver: zodResolver(userChangePasswordSchema),
+    resolver: zodResolver(makeUserChangePasswordSchema(tv)),
   });
 
   const { mutate, isPending } = useMutation({
@@ -115,13 +127,13 @@ function UserPasswordForm({ userId }: { userId: string }) {
       return { userId };
     },
     onSuccess: () => {
-      toast.success("Password updated successfully", {
+      toast.success(t("successToast"), {
         position: "bottom-right",
       });
       reset();
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Something went wrong!", {
+      toast.error(err.message || t("errorFallback"), {
         position: "bottom-right",
       });
     },
@@ -130,32 +142,32 @@ function UserPasswordForm({ userId }: { userId: string }) {
   return (
     <form onSubmit={handleSubmit((v) => mutate(v))} className="space-y-5">
       <Field
-        label="Current Password"
+        label={t("currentPassword")}
         required
         error={errors.currentPassword?.message}
       >
         <PasswordInput
-          placeholder="Enter your current password"
+          placeholder={t("currentPasswordPlaceholder")}
           error={!!errors.currentPassword}
           {...register("currentPassword")}
         />
       </Field>
 
-      <Field label="New Password" required error={errors.newPassword?.message}>
+      <Field label={t("newPassword")} required error={errors.newPassword?.message}>
         <PasswordInput
-          placeholder="Enter new password"
+          placeholder={t("newPasswordPlaceholder")}
           error={!!errors.newPassword}
           {...register("newPassword")}
         />
       </Field>
 
       <Field
-        label="Confirm New Password"
+        label={t("confirmNewPassword")}
         required
         error={errors.confirmPassword?.message}
       >
         <PasswordInput
-          placeholder="Re-enter new password"
+          placeholder={t("reEnterPlaceholder")}
           error={!!errors.confirmPassword}
           {...register("confirmPassword")}
         />
@@ -168,20 +180,26 @@ function UserPasswordForm({ userId }: { userId: string }) {
           className="rounded-lg gap-2"
         >
           <Save className="w-4 h-4" />
-          {isPending ? "Saving..." : "Save Changes"}
+          {isPending ? t("saving") : t("saveChanges")}
         </Button>
       </div>
     </form>
   );
 }
 
-// ─── Shell (shared header + card) ────────────────────────────────────────────
+// ─── Shell ────────────────────────────────────────────────────────────────────
 
+/**
+ * Container that renders either the admin or user password form depending
+ * on the current session role.
+ */
 export default function ChangePasswordForm({
   userId,
 }: ChangePasswordFormProps) {
+  const t = useTranslations("ChangePasswordForm");
   const session = useSession();
   const isAdmin = session.data?.user.role === "admin";
+
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-6">
       <div className="flex items-start gap-3">
@@ -200,12 +218,10 @@ export default function ChangePasswordForm({
         </div>
         <div>
           <h2 className="text-base font-semibold text-gray-900">
-            Change Password
+            {t("title")}
           </h2>
           <p className="text-sm text-gray-500 mt-0.5">
-            {isAdmin
-              ? "Set a new password for this user directly."
-              : "Update your password by verifying your current one first."}
+            {isAdmin ? t("adminSubtitle") : t("userSubtitle")}
           </p>
         </div>
       </div>

@@ -18,11 +18,12 @@ import { cn } from "@/shared/lib/utils/utils";
 import { updateUserRoleAction } from "@/shared/lib/actions/user.action";
 import { ROLE_PERMISSIONS } from "@/shared/lib/constant";
 import { Role } from "@/shared/lib/types/app-data.t";
+import { useTranslations } from "next-intl";
 
 type RoleConfig = {
   value: Role;
-  label: string;
-  description: string;
+  labelKey: "adminLabel" | "teamLeaderLabel" | "dataEntryLabel" | "userLabel";
+  descKey: "adminDesc" | "teamLeaderDesc" | "dataEntryDesc" | "userDesc";
   icon: React.ElementType;
   iconClass: string;
   selectedClass: string;
@@ -31,32 +32,32 @@ type RoleConfig = {
 const ROLES: RoleConfig[] = [
   {
     value: "admin",
-    label: "Admin",
-    description: "Full access to all system features",
+    labelKey: "adminLabel",
+    descKey: "adminDesc",
     icon: ShieldCheck,
     iconClass: "text-blue-500",
     selectedClass: "border-blue-500 bg-blue-50",
   },
   {
     value: "team leader",
-    label: "Team Leader",
-    description: "Manage leads, projects and team members",
+    labelKey: "teamLeaderLabel",
+    descKey: "teamLeaderDesc",
     icon: Users,
     iconClass: "text-green-500",
     selectedClass: "border-green-500 bg-green-50",
   },
   {
     value: "data entry",
-    label: "Data Entry",
-    description: "Create and manage lead information",
+    labelKey: "dataEntryLabel",
+    descKey: "dataEntryDesc",
     icon: Database,
     iconClass: "text-amber-500",
     selectedClass: "border-amber-500 bg-amber-50",
   },
   {
     value: "user",
-    label: "User",
-    description: "View leads and project information",
+    labelKey: "userLabel",
+    descKey: "userDesc",
     icon: User,
     iconClass: "text-purple-500",
     selectedClass: "border-purple-500 bg-purple-50",
@@ -68,25 +69,36 @@ type Props = {
   currentRole: Role;
 };
 
+/**
+ * Role picker that lets an admin change a user's role and preview the
+ * permissions that come with the selected role before saving.
+ */
 export default function ChangeUserPermissions({ userId, currentRole }: Props) {
+  const t = useTranslations("ChangePermissions");
+
+  // Navigation
   const router = useRouter();
+
+  // State
   const [selectedRole, setSelectedRole] = useState<Role>(currentRole);
 
+  // Variables
   const permissions = ROLE_PERMISSIONS[selectedRole];
   const half = Math.ceil(permissions.length / 2);
   const leftCol = permissions.slice(0, half);
   const rightCol = permissions.slice(half);
 
+  // Mutation
   const { mutate, isPending } = useMutation({
     mutationFn: async () => await updateUserRoleAction(userId, selectedRole),
     onSuccess: () => {
-      toast.success("User role updated successfully", {
+      toast.success(t("successToast"), {
         position: "bottom-right",
       });
       router.refresh();
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Something went wrong!", {
+      toast.error(err.message || t("errorFallback"), {
         position: "bottom-right",
       });
     },
@@ -97,17 +109,14 @@ export default function ChangeUserPermissions({ userId, currentRole }: Props) {
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-6">
       <div>
-        <h2 className="text-base font-semibold text-gray-900">Permissions</h2>
-        <p className="text-sm text-gray-500 mt-0.5">
-          Select a role to apply the default permissions for that role. You can
-          review the permissions below.
-        </p>
+        <h2 className="text-base font-semibold text-gray-900">{t("title")}</h2>
+        <p className="text-sm text-gray-500 mt-0.5">{t("subtitle")}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Role selection */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-700">Role</p>
+          <p className="text-sm font-medium text-gray-700">{t("roleLabel")}</p>
           <div className="space-y-2">
             {ROLES.map((role) => {
               const Icon = role.icon;
@@ -137,9 +146,9 @@ export default function ChangeUserPermissions({ userId, currentRole }: Props) {
                   <Icon className={cn("h-5 w-5 shrink-0", role.iconClass)} />
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {role.label}
+                      {t(role.labelKey)}
                     </p>
-                    <p className="text-xs text-gray-500">{role.description}</p>
+                    <p className="text-xs text-gray-500">{t(role.descKey)}</p>
                   </div>
                 </button>
               );
@@ -150,7 +159,7 @@ export default function ChangeUserPermissions({ userId, currentRole }: Props) {
         {/* Permissions preview */}
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-700">
-            Permissions Preview
+            {t("permissionsPreview")}
           </p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2">
             <div className="space-y-2">
@@ -176,10 +185,7 @@ export default function ChangeUserPermissions({ userId, currentRole }: Props) {
       {/* Info banner */}
       <div className="flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3">
         <Info className="h-4 w-4 shrink-0 text-blue-500" />
-        <p className="text-sm text-blue-600">
-          Changing the role will update the user&apos;s permissions based on the
-          selected role.
-        </p>
+        <p className="text-sm text-blue-600">{t("infoNote")}</p>
       </div>
 
       {/* Footer */}
@@ -191,7 +197,7 @@ export default function ChangeUserPermissions({ userId, currentRole }: Props) {
           onClick={() => mutate()}
         >
           <Save className="h-4 w-4" />
-          {isPending ? "Saving..." : "Save Changes"}
+          {isPending ? t("saving") : t("saveChanges")}
         </Button>
       </div>
     </div>

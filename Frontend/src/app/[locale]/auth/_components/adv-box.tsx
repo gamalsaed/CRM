@@ -7,6 +7,10 @@ type AdvProps = {
   description: string;
 };
 
+/**
+ * A single stat/feature highlight box used on the auth marketing panel.
+ * Renders an icon, a large metric value (children), and a short description.
+ */
 export default function AdvBox({ children, Icon, description }: AdvProps) {
   return (
     <div className="p-4 bg-[#222222] w-full rounded-2xl border-gray-200">

@@ -5,6 +5,7 @@ type CardProps = {
   count: number;
 };
 
+/** Maps a lead status string to its corresponding Tailwind colour classes. */
 const getStatusStyles = (status: string) => {
   switch (status.toLowerCase()) {
     case "new":
@@ -73,6 +74,7 @@ const getStatusStyles = (status: string) => {
   }
 };
 
+/** Status count card for the leads tracker grid. Colour is derived from the status name. */
 export default function CountCard({ title, count }: CardProps) {
   const style = getStatusStyles(title);
   return (

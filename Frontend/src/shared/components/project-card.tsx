@@ -1,8 +1,10 @@
+"use client";
+
 import { Card } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-// Types
 interface ProjectCardProps {
   name: string;
   createdAt: string;
@@ -12,7 +14,6 @@ interface ProjectCardProps {
   id: string;
 }
 
-// SVG Icon
 const ProjectIcon = () => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
     <rect width="40" height="40" rx="8" fill="#F0EEF8" />
@@ -30,6 +31,7 @@ export default function ProjectCard({
   leader,
   id,
 }: ProjectCardProps) {
+  const t = useTranslations("ProjectCard");
   return (
     <Link href={`/dashboard/projects/${id}`}>
       <Card className="flex max-sm:flex-col rounded-xl flex-row w-full items-center gap-8 px-6 py-5 cursor-pointer">
@@ -43,7 +45,7 @@ export default function ProjectCard({
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                Created {createdAt}
+                {t("created")} {createdAt}
               </span>
             </div>
           </div>
@@ -55,15 +57,15 @@ export default function ProjectCard({
         {/* Right: Stats */}
         <div className="flex max-sm:flex-col gap-10 shrink-0 ">
           <div>
-            <p className="text-sm text-muted-foreground mb-1">All leads</p>
+            <p className="text-sm text-muted-foreground mb-1">{t("allLeads")}</p>
             <p className="text-xl font-medium">{allLeads}</p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground mb-1">Assignees</p>
+            <p className="text-sm text-muted-foreground mb-1">{t("assignees")}</p>
             <p className="text-xl font-medium">{assignees}</p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground mb-1">Team Leader</p>
+            <p className="text-sm text-muted-foreground mb-1">{t("teamLeader")}</p>
             <p className="text-xl font-medium">{leader}</p>
           </div>
         </div>

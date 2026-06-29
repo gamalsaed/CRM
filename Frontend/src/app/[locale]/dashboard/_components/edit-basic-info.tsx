@@ -11,10 +11,12 @@ import { Info, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils/utils";
-import { basicInfoSchema, BasicInfoValues } from "@/shared/lib/schemas/users.s";
+import { makeBasicInfoSchema, BasicInfoValues } from "@/shared/lib/schemas/users.s";
 import Field from "@/shared/components/field";
+import { useTranslations } from "next-intl";
 
-// Types
+// ─── Types ────────────────────────────────────────────────────────────────────
+
 type BasicInfoFormProps = {
   user: {
     _id: string;
@@ -25,18 +27,25 @@ type BasicInfoFormProps = {
   };
 };
 
+/**
+ * Form for editing a user's name, email, and phone number.
+ * Resets to the server-returned values on successful save.
+ */
 export default function BasicInfoForm({ user }: BasicInfoFormProps) {
-  // Router
+  const t = useTranslations("BasicInfoForm");
+  const tv = useTranslations("Validation");
+
+  // Navigation
   const router = useRouter();
 
-  // React Hook Form
+  // Form & Validation
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<BasicInfoValues>({
-    resolver: zodResolver(basicInfoSchema),
+    resolver: zodResolver(makeBasicInfoSchema(tv)),
     defaultValues: {
       name: user.name,
       email: user.email,
@@ -50,7 +59,7 @@ export default function BasicInfoForm({ user }: BasicInfoFormProps) {
       return await updateUserAction(data, user._id);
     },
     onSuccess: (data) => {
-      toast.success("User updated successfully", { position: "bottom-right" });
+      toast.success(t("successToast"), { position: "bottom-right" });
       router.refresh();
       reset({
         name: data?.data?.user.name,
@@ -59,7 +68,7 @@ export default function BasicInfoForm({ user }: BasicInfoFormProps) {
       });
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Something went wrong!", {
+      toast.error(err.message || t("errorFallback"), {
         position: "bottom-right",
       });
     },
@@ -70,38 +79,36 @@ export default function BasicInfoForm({ user }: BasicInfoFormProps) {
       {/* Header */}
       <div>
         <h2 className="text-base font-semibold text-gray-900">
-          Basic Information
+          {t("title")}
         </h2>
-        <p className="text-sm text-gray-500 mt-0.5">
-          Update the user&apos;s basic information and account details.
-        </p>
+        <p className="text-sm text-gray-500 mt-0.5">{t("subtitle")}</p>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit((v) => mutate(v))} className="space-y-5">
         {/* Row 1: Name + Email */}
-        <Field label="Full Name" required error={errors.name?.message}>
+        <Field label={t("fullName")} required error={errors.name?.message}>
           <Input
-            placeholder="e.g. Mona Khaled"
+            placeholder={t("namePlaceholder")}
             className={cn("rounded-lg", errors.name && "border-destructive ")}
             {...register("name")}
           />
         </Field>
 
-        <Field label="Email" required error={errors.email?.message}>
+        <Field label={t("email")} required error={errors.email?.message}>
           <Input
             type="email"
-            placeholder="e.g. mona@example.com"
+            placeholder={t("emailPlaceholder")}
             className={cn("rounded-lg", errors.email && "border-destructive ")}
             {...register("email")}
           />
         </Field>
 
         {/* Row 2: Phone + Role */}
-        <Field label="Phone Number" required error={errors.phone?.message}>
+        <Field label={t("phoneNumber")} required error={errors.phone?.message}>
           <Input
             type="tel"
-            placeholder="+201012345678"
+            placeholder={t("phonePlaceholder")}
             className={cn("rounded-lg", errors.phone && "border-destructive ")}
             {...register("phone")}
           />
@@ -110,9 +117,7 @@ export default function BasicInfoForm({ user }: BasicInfoFormProps) {
         {/* Info Banner */}
         <div className="flex items-center gap-3 rounded-lg bg-blue-50 border border-blue-100 px-4 py-3">
           <Info className="w-4 h-4 text-blue-500 shrink-0" />
-          <p className="text-sm text-blue-600">
-            Updating basic information will not change the user&apos;s password.
-          </p>
+          <p className="text-sm text-blue-600">{t("infoNote")}</p>
         </div>
 
         {/* Footer */}
@@ -123,7 +128,7 @@ export default function BasicInfoForm({ user }: BasicInfoFormProps) {
             className="rounded-lg gap-2"
           >
             <Save className="w-4 h-4" />
-            {isPending ? "Saving..." : "Save Changes"}
+            {isPending ? t("saving") : t("saveChanges")}
           </Button>
         </div>
       </form>
