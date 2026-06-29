@@ -1,10 +1,9 @@
 import LoginForm from "./_components/login-form";
 import { Lock } from "lucide-react";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
 
+/** Login page. Centers the logo, heading and login form vertically. */
 export default async function page() {
-  const t = await getTranslations("LoginPage");
   return (
     <div className="flex justify-center h-full items-center">
       <div>
@@ -15,8 +14,10 @@ export default async function page() {
         <div className="w-11 h-11 mb-8 flex justify-center items-center rounded-2xl bg-primary-50 border border-primary-200">
           <Lock width={20} height={20} className="text-primary-500" />
         </div>
-        <h1 className=" text-2xl font-semibold">{t("welcomeBack")}</h1>
-        <p className="text-gray-400 mb-8">{t("signInSubtitle")}</p>
+        <h1 className=" text-2xl font-semibold">Welcome back</h1>
+        <p className="text-gray-400 mb-8">
+          Sign in to continue to your workspace
+        </p>
         <LoginForm />
       </div>
     </div>
