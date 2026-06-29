@@ -2,12 +2,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useLogin } from "@/shared/hooks/use-login";
-import * as z from "zod";
 import { ErrorBox } from "@/shared/components/error_box";
 import { useTranslations } from "next-intl";
 // Shadcn
 import { Button } from "@/components/ui/button";
-import { loginSchema } from "@/shared/lib/schemas/auth.s";
+import { makeLoginSchema, type LoginFormValues } from "@/shared/lib/schemas/auth.s";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
@@ -20,9 +19,12 @@ import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
   const t = useTranslations("LoginPage");
+  const tv = useTranslations("Validation");
   const { login, error, isPending } = useLogin();
 
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const loginSchema = makeLoginSchema(tv);
+
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -31,7 +33,7 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof loginSchema>) {
+  function onSubmit(data: LoginFormValues) {
     login(data);
   }
 
@@ -98,7 +100,7 @@ export default function LoginForm() {
           )}
         />
       </FieldGroup>
-      {error && <ErrorBox error={`${error}`} />}
+      <div className="my-2">{error && <ErrorBox error={`${error}`} />}</div>
       <Button type="submit" form="form-rhf-demo" disabled={isPending}>
         {isPending ? t("signingIn") : t("signIn")}
       </Button>

@@ -15,7 +15,7 @@ export function ErrorBox({ error, className }: ErrorBoxProps) {
   return (
     <p
       className={cn(
-        "relative flex justify-center items-center min-h-10 w-full p-2.5 border border-destructive bg-destructive-50 text-sm font-regular text-destructive text-center",
+        "relative rounded-xl flex justify-center items-center min-h-10 w-full p-2.5 border border-destructive bg-destructive-50 text-sm font-regular text-destructive text-center",
         className,
       )}
     >
