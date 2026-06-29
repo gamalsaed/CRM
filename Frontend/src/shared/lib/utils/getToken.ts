@@ -7,7 +7,12 @@ import { cookies } from "next/headers";
  * Must only be called from Server Components or Server Actions.
  */
 export default async function getMyToken() {
-  const encodedToken = (await cookies()).get("next-auth.session-token")?.value;
+  const cookieStore = await cookies();
+
+  const encodedToken =
+    cookieStore.get("__Secure-next-auth.session-token")?.value ||
+    cookieStore.get("next-auth.session-token")?.value;
+
   const token = await decode({
     token: encodedToken,
     secret: process.env.NEXTAUTH_SECRET!,
