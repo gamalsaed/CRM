@@ -50,7 +50,7 @@ export default function LeadDetails({
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 ">
-      <div className="flex items-start gap-4">
+      <div className="flex items-start max-sm:flex-col gap-4">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-base font-semibold text-blue-600">
           {getInitials(name)}
         </div>

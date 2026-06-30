@@ -16,10 +16,12 @@ export default async function page() {
     <div>
       <header className="flex items-center justify-between max-md:flex-col max-md:gap-4 mb-4">
         <div>
-          <h1 className=" text-3xl font-semibold max-md:text-center">{t("title")}</h1>
+          <h1 className=" text-3xl font-semibold max-md:text-center">
+            {t("title")}
+          </h1>
           <p className="text-gray-500">{t("subtitle")}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex max-sm:flex-col gap-3">
           <Link href="/dashboard/leads/create-leads">
             <Button className="w-32">
               <Plus /> {t("createLeads")}
