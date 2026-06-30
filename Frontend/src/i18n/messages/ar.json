@@ -1,0 +1,428 @@
+{
+  "HomePage": { "title": "مرحبا" },
+  "LoginPage": {
+    "title": "تسجيل الدخول",
+    "welcomeBack": "مرحباً بعودتك",
+    "signInSubtitle": "سجّل دخولك للمتابعة إلى مساحة العمل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "rememberMe": "تذكّرني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "passwordPlaceholder": "أدخل كلمة مرورك",
+    "signingIn": "جارٍ تسجيل الدخول...",
+    "signIn": "تسجيل الدخول إلى G-CRM"
+  },
+  "AdvSide": {
+    "trustedBadge": "موثوق به من قِبل الفرق حول العالم",
+    "headline1": "أدِر أعمالك",
+    "headline2": "بلا حدود.",
+    "tagline": "أدِر كل شيء في مكان واحد",
+    "activeUsers": "مستخدمون نشطون",
+    "satisfaction": "الرضا",
+    "uptimeSla": "وقت التشغيل",
+    "testimonial": "\"استبدل VeltroxCRM ثلاثة أدوات لدينا. انضمّ فريقنا خلال يوم واحد وأغلقنا 40% صفقات إضافية في الشهر الأول.\"",
+    "testimonialAuthor": "أرجون م. - رئيس العمليات",
+    "copyright": "© 2026 VeltroxCRM"
+  },
+  "DashboardPage": {
+    "trackLeads": "تتبع العملاء المحتملين",
+    "projects": "المشاريع",
+    "viewAllProjects": "عرض جميع المشاريع",
+    "leads": "العملاء المحتملون"
+  },
+  "LeadsPage": {
+    "title": "العملاء المحتملون",
+    "subtitle": "عرض وإدارة جميع العملاء المحتملين في النظام",
+    "createLeads": "إضافة عملاء",
+    "import": "استيراد",
+    "export": "تصدير"
+  },
+  "ErrorPage": {
+    "title": "حدث خطأ ما",
+    "defaultMessage": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى أو العودة.",
+    "goBack": "العودة",
+    "tryAgain": "حاول مجدداً",
+    "contactSupport": "إذا استمرت المشكلة، يرجى التواصل مع الدعم."
+  },
+  "ProjectPage": {
+    "leads": "العملاء المحتملون",
+    "team": "الفريق",
+    "projectDescription": "وصف المشروع",
+    "projectInformation": "معلومات المشروع",
+    "createdBy": "أُنشئ بواسطة",
+    "createdAt": "تاريخ الإنشاء",
+    "updatedAt": "تاريخ التحديث",
+    "teamLeader": "قائد الفريق",
+    "noLeaderYet": "لا يوجد قائد بعد",
+    "active": "نشط"
+  },
+  "EmployeePage": {
+    "title": "تفاصيل المستخدم",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "teamMembers": "أعضاء الفريق",
+    "deleteSuccessMsg": "تم حذف المستخدم بنجاح",
+    "deleteFailMsg": "حدث خطأ ما!",
+    "deleteTitle": "حذف المستخدم",
+    "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف المستخدم نهائياً."
+  },
+  "LeadColumns": {
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "status": "الحالة",
+    "project": "المشروع",
+    "assignedTo": "مُسنَد إلى",
+    "actions": "الإجراءات",
+    "noProject": "لا يوجد مشروع",
+    "notAssignedYet": "لم يُسنَد بعد"
+  },
+  "LeadsChart": { "status": "الحالة" },
+  "LeadForm": {
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "whatsApp": "واتساب",
+    "email": "البريد الإلكتروني",
+    "source": "المصدر",
+    "selectSource": "اختر المصدر",
+    "save": "حفظ",
+    "sourceTikTok": "تيك توك",
+    "sourceSnapchat": "سناب شات",
+    "sourceFacebook": "فيسبوك",
+    "sourceInstagram": "إنستغرام",
+    "sourceRecommended": "موصى به",
+    "sourceOther": "أخرى"
+  },
+  "LeadsToolbar": {
+    "leadsReady": "{count} عميل جاهز",
+    "clearAll": "مسح الكل",
+    "saving": "جارٍ الحفظ...",
+    "saveAllLeads": "حفظ جميع العملاء"
+  },
+  "LeadDetails": {
+    "addedOn": "أُضيف في",
+    "by": "بواسطة",
+    "project": "المشروع",
+    "source": "المصدر",
+    "assignedTo": "مُسنَد إلى"
+  },
+  "LeadStatus": {
+    "new": "جديد",
+    "contacted": "تم التواصل",
+    "qualified": "مؤهَّل",
+    "closed": "مغلق",
+    "lost": "خسارة",
+    "problem": "مشكلة",
+    "solved": "محلول",
+    "successMessage": "تم تحديث الحالة بنجاح"
+  },
+  "EditLeadDialog": {
+    "editButton": "تعديل",
+    "title": "تعديل العميل",
+    "description": "تعديل المعلومات الأساسية لهذا العميل.",
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "whatsApp": "واتساب",
+    "email": "البريد الإلكتروني",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "successMessage": "تم تحديث العميل بنجاح"
+  },
+  "NotesList": {
+    "title": "الملاحظات",
+    "subtitle": "جميع الملاحظات والتعليقات حول هذا العميل",
+    "emptyState": "اكتب أولى ملاحظاتك"
+  },
+  "AddNoteDialog": {
+    "addNoteButton": "إضافة ملاحظة",
+    "title": "إضافة ملاحظة",
+    "description": "اترك ملاحظة على هذا العميل لفريقك.",
+    "noteLabel": "الملاحظة",
+    "placeholder": "اكتب ملاحظتك هنا...",
+    "minChars": "5 أحرف على الأقل",
+    "saving": "جارٍ الحفظ...",
+    "saveNote": "حفظ الملاحظة",
+    "successMsg": "تمت إضافة الملاحظة بنجاح",
+    "errorFallback": "حدث خطأ ما!"
+  },
+  "NoteAction": {
+    "remove": "إزالة",
+    "successMsg": "تم حذف الملاحظة بنجاح",
+    "errorFallback": "حدث خطأ ما!"
+  },
+  "Note": {
+    "badge": "ملاحظة"
+  },
+  "UploadDialog": {
+    "importButton": "استيراد",
+    "title": "استيراد العملاء",
+    "description": "ارفع جدول بيانات لإنشاء عملاء بالجملة"
+  },
+  "UploadStep": {
+    "dragDrop": "اسحب وأفلت ملف Excel",
+    "browseHint": "أو انقر للتصفح - xlsx. حتى 10 ميغابايت",
+    "fileName": "اسم الملف:",
+    "fileSize": "حجم الملف:",
+    "preview": "معاينة"
+  },
+  "ValidationStep": {
+    "validRows": "الصفوف الصحيحة",
+    "rowsWithErrors": "الصفوف التي تحتوي على أخطاء",
+    "saving": "جارٍ الحفظ...",
+    "importLeads": "استيراد {count} عميل"
+  },
+  "PreviewStep": {
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "source": "المصدر",
+    "continue": "متابعة"
+  },
+  "FinalStep": {
+    "importComplete": "اكتمل الاستيراد",
+    "leadSingular": "عميل",
+    "leadPlural": "عملاء",
+    "importedSuffix": "تم استيرادهم وإضافتهم إلى مساحة العمل بنجاح.",
+    "rowSingular": "صف تم تخطيه.",
+    "rowPlural": "صفوف تم تخطيها.",
+    "done": "تم",
+    "importFailed": "فشل الاستيراد",
+    "close": "إغلاق",
+    "tryAgain": "حاول مجدداً"
+  },
+  "ProjectForm": {
+    "addProject": "+ إضافة مشروع",
+    "createTitle": "إنشاء مشروع جديد",
+    "projectName": "اسم المشروع",
+    "description": "الوصف",
+    "namePlaceholder": "مثال: نظام إدارة العملاء",
+    "descriptionPlaceholder": "أوجز الغرض من المشروع...",
+    "creating": "جارٍ الإنشاء...",
+    "createProject": "إنشاء مشروع",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "createSuccess": "تم إنشاء المشروع بنجاح",
+    "updateSuccess": "تم تحديث المشروع بنجاح",
+    "errorFallback": "حدث خطأ ما!"
+  },
+  "DetailsProjectCard": {
+    "editProject": "تعديل المشروع",
+    "assignTeamLeader": "تعيين قائد الفريق",
+    "deleteProject": "حذف المشروع",
+    "assignUsers": "تعيين المستخدمين",
+    "totalLeads": "إجمالي العملاء",
+    "assignees": "المُكلَّفون",
+    "teamLeader": "قائد الفريق",
+    "status": "الحالة",
+    "created": "أُنشئ",
+    "assignTLSuccess": "تم تعيين قائد الفريق للمشروع بنجاح",
+    "deleteSuccess": "تم حذف المشروع بنجاح",
+    "deleteFailMsg": "حدث خطأ ما!",
+    "deleteTitle": "حذف المشروع",
+    "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف المشروع نهائياً."
+  },
+  "AssignUsersToProject": {
+    "dialogTitle": "تعيين مستخدمين للمشروع",
+    "dialogDescription": "اختر مستخدماً أو أكثر لإضافتهم إلى هذا المشروع.",
+    "searchPlaceholder": "ابحث بالاسم أو البريد الإلكتروني...",
+    "loadingUsers": "جارٍ تحميل المستخدمين...",
+    "noUsersFound": "لا يوجد مستخدمون",
+    "selectedSingular": "مستخدم واحد محدد",
+    "selectedPlural": "{count} مستخدمون محددون",
+    "assignUsers": "تعيين المستخدمين",
+    "successMsg": "تم تعيين المستخدمين للمشروع بنجاح",
+    "errorMsg": "حدث خطأ ما!"
+  },
+  "UserDetails": {
+    "assignedLeads": "العملاء المُسنَدون",
+    "activeProjects": "المشاريع النشطة",
+    "teamMembers": "أعضاء الفريق",
+    "conversionRate": "معدل التحويل",
+    "salesTeam": "فريق المبيعات",
+    "joined": "انضمّ في",
+    "tagline": "يتولى تنسيق المشاريع ومتابعة العملاء المحتملين"
+  },
+  "AssignedProjects": {
+    "title": "المشاريع المُسنَدة",
+    "name": "الاسم",
+    "leads": "العملاء",
+    "teamMembers": "أعضاء الفريق",
+    "noProjects": "لا توجد مشاريع."
+  },
+  "EmployeePermissions": {
+    "title": "الصلاحيات",
+    "description": "تحدد هذه الصلاحيات ما يمكن للمستخدم الوصول إليه وإدارته في النظام"
+  },
+  "ProjectsLayout": {
+    "projects": "المشاريع",
+    "searchPlaceholder": "ابحث عن المشاريع...",
+    "noResults": "لا توجد نتائج.",
+    "notAssigned": "لم يُعيَّن بعد"
+  },
+  "ProjectCard": {
+    "created": "أُنشئ في",
+    "allLeads": "جميع العملاء المحتملين",
+    "assignees": "المُكلَّفون",
+    "teamLeader": "قائد الفريق"
+  },
+  "DataTable": {
+    "searchPlaceholder": "ابحث عن أي شيء...",
+    "fields": "الحقول",
+    "selected": "محدد",
+    "noResults": "لا توجد نتائج.",
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "AssignDialog": {
+    "assignTo": "تعيين إلى {target}",
+    "selectA": "اختر {target}",
+    "aboutToAssign": "أنت على وشك تعيين {count} عميل إلى {target}",
+    "assign": "تعيين",
+    "successMsg": "تم تعيين العملاء المحتملين بنجاح",
+    "targetUser": "مستخدم",
+    "targetProject": "مشروع",
+    "targetTeamLeader": "قائد فريق"
+  },
+  "DeleteDialog": {
+    "cancel": "إلغاء",
+    "delete": "حذف"
+  },
+  "Layout": {
+    "dashboard": "لوحة التحكم"
+  },
+  "AppSidebar": {
+    "dashboard": "لوحة التحكم",
+    "projects": "المشاريع",
+    "employees": "الموظفون",
+    "leads": "العملاء المحتملون",
+    "signOut": "تسجيل الخروج"
+  },
+  "ProfileDropDown": {
+    "editProfile": "تعديل الملف الشخصي",
+    "signOut": "تسجيل الخروج"
+  },
+  "UsersColumns": {
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "role": "الدور",
+    "actions": "الإجراءات"
+  },
+  "EditUser": {
+    "title": "تعديل المستخدم",
+    "subtitle": "تحديث معلومات المستخدم وإدارة إعدادات الحساب",
+    "basicInfo": "المعلومات الأساسية",
+    "changePassword": "تغيير كلمة المرور",
+    "permissions": "الصلاحيات"
+  },
+  "BasicInfoForm": {
+    "title": "المعلومات الأساسية",
+    "subtitle": "تحديث المعلومات الأساسية للمستخدم وتفاصيل الحساب.",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "namePlaceholder": "مثال: منى خالد",
+    "emailPlaceholder": "مثال: mona@example.com",
+    "phonePlaceholder": "+201012345678",
+    "infoNote": "تحديث المعلومات الأساسية لن يغير كلمة مرور المستخدم.",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "successToast": "تم تحديث المستخدم بنجاح",
+    "errorFallback": "حدث خطأ ما!"
+  },
+  "ChangePasswordForm": {
+    "title": "تغيير كلمة المرور",
+    "adminSubtitle": "تعيين كلمة مرور جديدة لهذا المستخدم مباشرةً.",
+    "userSubtitle": "تحديث كلمة المرور بعد التحقق من كلمة المرور الحالية.",
+    "adminNote": "بصفتك مشرفاً، يمكنك تعيين كلمة مرور جديدة مباشرةً دون الحاجة لكلمة المرور الحالية.",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+    "reEnterPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+    "currentPasswordPlaceholder": "أدخل كلمة مرورك الحالية",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "successToast": "تم تحديث كلمة المرور بنجاح",
+    "errorFallback": "حدث خطأ ما!"
+  },
+  "ChangePermissions": {
+    "title": "الصلاحيات",
+    "subtitle": "اختر دوراً لتطبيق الصلاحيات الافتراضية لذلك الدور. يمكنك مراجعة الصلاحيات أدناه.",
+    "roleLabel": "الدور",
+    "permissionsPreview": "معاينة الصلاحيات",
+    "infoNote": "تغيير الدور سيحدّث صلاحيات المستخدم بناءً على الدور المختار.",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "successToast": "تم تحديث دور المستخدم بنجاح",
+    "errorFallback": "حدث خطأ ما!",
+    "adminLabel": "مشرف",
+    "adminDesc": "وصول كامل لجميع ميزات النظام",
+    "teamLeaderLabel": "قائد الفريق",
+    "teamLeaderDesc": "إدارة العملاء المحتملين والمشاريع وأعضاء الفريق",
+    "dataEntryLabel": "إدخال البيانات",
+    "dataEntryDesc": "إنشاء وإدارة معلومات العملاء المحتملين",
+    "userLabel": "مستخدم",
+    "userDesc": "عرض العملاء المحتملين ومعلومات المشروع"
+  },
+  "UserDropDown": {
+    "remove": "إزالة",
+    "removeSuccessMsg": "تم إزالة المستخدم بنجاح",
+    "removeFailMsg": "حدث خطأ ما!",
+    "removeTitle": "إزالة المستخدم من المشروع",
+    "removeDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم إزالة المستخدم نهائياً."
+  },
+  "LeadDropDown": {
+    "deleteSuccessMsg": "تم حذف العميل المحتمل بنجاح",
+    "deleteFailMsg": "حدث خطأ ما!",
+    "deleteTitle": "حذف العملاء المحتملين",
+    "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف العملاء المحتملين المحددين نهائياً."
+  },
+  "ErrorBox": {
+    "fallback": "حدث خطأ ما!"
+  },
+  "UserForm": {
+    "newEmployee": "+ موظف جديد",
+    "createTitle": "إنشاء مستخدم جديد",
+    "fullName": "الاسم الكامل",
+    "namePlaceholder": "مثال: منى خالد",
+    "emailAddress": "البريد الإلكتروني",
+    "emailPlaceholder": "مثال: mona@example.com",
+    "phoneNumber": "رقم الهاتف",
+    "phonePlaceholder": "+201012345678",
+    "role": "الدور",
+    "selectRole": "اختر الدور",
+    "security": "الأمان",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "8 أحرف على الأقل، حرف كبير، رقم، ورمز خاص",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "creating": "جارٍ الإنشاء...",
+    "createUser": "إنشاء مستخدم",
+    "successMsg": "تمت إضافة المستخدم بنجاح",
+    "errorFallback": "حدث خطأ ما!",
+    "roleUser": "مستخدم",
+    "roleDataEntry": "إدخال بيانات",
+    "roleTeamLeader": "قائد الفريق",
+    "roleAdmin": "مدير"
+  },
+  "Validation": {
+    "nameRequired": "الاسم مطلوب",
+    "nameMin": "يجب أن يتكون الاسم من حرفين على الأقل",
+    "nameMax": "يجب أن يكون الاسم أقل من 100 حرف",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+    "passwordUppercase": "يجب أن تحتوي على حرف كبير واحد على الأقل",
+    "passwordLowercase": "يجب أن تحتوي على حرف صغير واحد على الأقل",
+    "passwordNumber": "يجب أن تحتوي على رقم واحد على الأقل",
+    "passwordSpecial": "يجب أن تحتوي على رمز خاص واحد على الأقل",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
+    "confirmNewPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة",
+    "currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+    "passwordsMustMatch": "كلمتا المرور غير متطابقتين"
+  }
+}
